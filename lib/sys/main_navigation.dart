@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/books/books.dart';
-import '../pages/categories/categories.dart';
+import '../pages/home/home.dart';
+import '../pages/lends/lends.dart';
 import '../pages/subpages/create.dart';
 import '../pages/subpages/search.dart';
 
@@ -17,7 +18,7 @@ class MainNavigation extends StatefulWidget {
 
 class _ResponsiveScaffoldState extends State<MainNavigation> {
   // List of Pages
-  final pages = [const BooksPage(), const CategoriesPage(), const Placeholder()];
+  final pages = [const HomePage(), const BooksPage(), const LendsPage()];
 
   int currentIndex = 0;
 
@@ -40,13 +41,13 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
                 });
               },
               destinations: const [
-                NavigationRailDestination(
-                  icon: Icon(Icons.bookmark_rounded),
-                  label: Text('Libri'),
-                ),
+
                 NavigationRailDestination(
                   icon: Icon(Icons.interests_rounded),
-                  label: Text('Categorie'),
+                  label: Text('Home'),
+                ),                NavigationRailDestination(
+                  icon: Icon(Icons.bookmark_rounded),
+                  label: Text('Libri'),
                 ),
                 NavigationRailDestination(
                   icon: Icon(Icons.schedule_rounded),
@@ -66,13 +67,13 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
             body: pages[currentIndex],
             bottomNavigationBar: NavigationBar(
               destinations: const [
-                NavigationDestination(
-                  icon: Icon(Icons.bookmark_rounded),
-                  label: 'Libri',
-                ),
+
                 NavigationDestination(
                   icon: Icon(Icons.interests_rounded),
-                  label: 'Categorie',
+                  label: 'Home',
+                ),NavigationDestination(
+                  icon: Icon(Icons.bookmark_rounded),
+                  label: 'Libri',
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.schedule_rounded),
@@ -103,20 +104,34 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CreateBookPage()));
+
+                showModalBottomSheet(
+                    showDragHandle: true,
+                    context: context,
+
+                    builder: (context) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: const CreateBookPage(),
+                      );
+                    });
               },
               child: const Text("Crea da zero"),
             ),
             FilledButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const BookSearchPage()));
+                showModalBottomSheet<void>(
+                    useSafeArea: true,
+                    showDragHandle: true,
+                    context: context,
+                    builder: (context) {
+                      return Padding(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                          child: const BookSearchPage());
+                    });
               },
               child: const Text("Cerca su Google Books"),
             )

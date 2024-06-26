@@ -76,7 +76,7 @@ class _BooksPageState extends State<BooksPage> {
                 },
               ),
             ),
-            currentFilter.first == 0
+            Expanded(child: currentFilter.first == 0
 
             // FAVORITES
                 ? FilteredView(filter: FirebaseFirestore.instance
@@ -88,19 +88,19 @@ class _BooksPageState extends State<BooksPage> {
                 : (currentFilter.first == 1
 
             // TO READ
-                    ? FilteredView(filter: FirebaseFirestore.instance
+                ? FilteredView(filter: FirebaseFirestore.instance
                 .collection("Data")
                 .doc(FirebaseAuth.instance.currentUser!.email.toString())
                 .collection("books")
                 .where('read', isEqualTo: false)
                 .snapshots())
 
-                    // ALL BOOKS
-                    : FilteredView(filter: FirebaseFirestore.instance
+            // ALL BOOKS
+                : FilteredView(filter: FirebaseFirestore.instance
                 .collection("Data")
                 .doc(FirebaseAuth.instance.currentUser!.email.toString())
                 .collection("books")
-                .snapshots())),
+                .snapshots())),)
           ],
         ));
   }

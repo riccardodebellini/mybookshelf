@@ -71,7 +71,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
             ListTile(
               title: const Text("Cambia il nome visualizzato"),
               leading: const Icon(Icons.drive_file_rename_outline_rounded),
-              trailing: FilledButton(
+              trailing: FilledButton.tonal(
                 onPressed: editName,
                 child: const Text("Cambia"),
               ),
@@ -79,7 +79,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
             ListTile(
               title: const Text("Cambia password"),
               leading: const Icon(Icons.password_rounded),
-              trailing: FilledButton(
+              trailing: FilledButton.tonal(
                 onPressed: editPassword,
                 child: const Text("Cambia"),
               ),
@@ -87,11 +87,12 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
             ListTile(
               title: const Text("Effettua il logout"),
               leading: const Icon(Icons.logout_rounded),
-              trailing: FilledButton(
+              trailing: FilledButton.tonal(
                 child: const Text("Esci"),
                 onPressed: () {
                   FirebaseAuth.instance.signOut();
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 },
               ),
             ),

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'cards.dart';
 
 class FilteredView extends StatefulWidget {
-  Stream<QuerySnapshot> filter;
+  final Stream<QuerySnapshot> filter;
 
-  FilteredView({super.key, required this.filter});
+  const FilteredView({super.key, required this.filter});
 
   @override
   State<FilteredView> createState() => _FilteredViewState();
@@ -15,51 +15,49 @@ class FilteredView extends StatefulWidget {
 class _FilteredViewState extends State<FilteredView> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: StreamBuilder<QuerySnapshot>(
-        stream: widget.filter,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: widget.filter,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Error loading books');
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-            return const Text('Error loading books');
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+        final bookDocs = snapshot.data!.docs;
+        return MediaQuery.of(context).size.width > 840
+            ? GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, mainAxisExtent: 64),
+                itemBuilder: (context, index) {
+                  final bookData =
+                      bookDocs[index].data() as Map<String, dynamic>;
+                  final bookId = bookDocs[index].reference.id;
 
-          final bookDocs = snapshot.data!.docs;
-          return MediaQuery.of(context).size.width > 840
-              ? GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisExtent: 64),
-            itemBuilder: (context, index) {
-              final bookData =
-              bookDocs[index].data() as Map<String, dynamic>;
-              final bookId = bookDocs[index].reference.id;
+                  return BooksCards(
+                    book: bookData,
+                    id: bookId,
+                  );
+                },
+                itemCount: bookDocs.length,
+          shrinkWrap: true,
+              )
+            : ListView.builder(
+          shrinkWrap: true,
+                itemCount: bookDocs.length,
+                itemBuilder: (context, index) {
+                  final bookData =
+                      bookDocs[index].data() as Map<String, dynamic>;
+                  final bookId = bookDocs[index].reference.id;
 
-              return BooksCards(
-                book: bookData,
-                id: bookId,
+                  return BooksCards(
+                    book: bookData,
+                    id: bookId,
+                  );
+                },
               );
-            },
-            itemCount: bookDocs.length,
-          )
-              : ListView.builder(
-            itemCount: bookDocs.length,
-            itemBuilder: (context, index) {
-              final bookData =
-              bookDocs[index].data() as Map<String, dynamic>;
-              final bookId = bookDocs[index].reference.id;
-
-              return BooksCards(
-                book: bookData,
-                id: bookId,
-              );
-            },
-          );
-        },
-      ),
+      },
     );
   }
-
 }

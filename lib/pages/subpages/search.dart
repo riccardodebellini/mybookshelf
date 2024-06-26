@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 
 import 'create.dart';
 
-
 class Book {
   final String title;
   final String year;
@@ -21,16 +20,15 @@ class Book {
     final volumeInfo = json['volumeInfo'];
     return Book(
       title: volumeInfo['title'],
-      year: volumeInfo['publishedDate'] ?? 'Unknown',
-      author: volumeInfo['authors']?.join(', ') ?? 'Unknown',
-      abstract: volumeInfo['description'] ?? 'No description available',
+      year: volumeInfo['publishedDate'] ?? '--',
+      author: volumeInfo['authors']?.join(', ') ?? '--',
+      abstract: volumeInfo['description'] ?? '--',
     );
   }
 }
 
 class BookListTile extends StatelessWidget {
   final Book book;
-
 
   const BookListTile({super.key, required this.book});
 
@@ -39,18 +37,22 @@ class BookListTile extends StatelessWidget {
     return ListTile(
       title: Text(book.title),
       subtitle: Text('${book.year} - ${book.author}'),
-      trailing: IconButton(
-        onPressed: () {
-
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreateBookPage(
-                        data: book,
-                      )));
-        },
-        icon: const Icon(Icons.chevron_right_rounded),
-      ),
+      onTap: () {
+        Navigator.pop(context);
+        showModalBottomSheet<void>(
+            showDragHandle: true,
+            context: context,
+            constraints: const BoxConstraints(maxWidth: 600),
+            builder: (context) {
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: CreateBookPage(
+                  data: book,
+                ),
+              );
+            });
+      },
     );
   }
 }
@@ -68,40 +70,28 @@ class _BookSearchPageState extends State<BookSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cerca un libro'),
-      ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _queryController,
-              onSubmitted: (query) {
-                _searchBooks(query);
-              },
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      _searchBooks(_queryController.text);
-                    },
-                    icon: const Icon(Icons.search_rounded)),
-                hintText: "Cerca con Google Books",
-              ),
+    return ListView(
+      children: [
+        ListTile(
+          title: TextField(
+            controller: _queryController,
+            onChanged: (query) {
+              _searchBooks(query);
+            },
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Cerca con Google Books",
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _books.length,
-              itemBuilder: (context, index) {
-                return BookListTile(book: _books[index]);
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: _books.length,
+          itemBuilder: (context, index) {
+            return BookListTile(book: _books[index]);
+          },
+        ),
+      ],
     );
   }
 

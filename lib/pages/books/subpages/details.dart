@@ -26,7 +26,7 @@ class BooksDetails extends StatelessWidget {
                       .doc(id)
                       .delete();
                 },
-                icon: Icon(Icons.delete_rounded))
+                icon: const Icon(Icons.delete_rounded))
           ],
         ),
         body: ListView(
@@ -48,10 +48,28 @@ class BooksDetails extends StatelessWidget {
             ),
             ListTile(
               title: const Text("Rating"),
-              subtitle: Text(book['read'] == false
-                  ? "Il libro non è ancora stato letto"
-                  : "⭐" * book['rating'].round()),
-              leading: const Icon(Icons.star_rate_rounded),
+              subtitle: book['read'] == false
+                  ? Text("Il libro non è ancora stato letto")
+                  : Row(
+                      children: List.generate(book['rating'], (int index) {
+                        return Icon(Icons.star_rounded);
+                      }),
+                    ),
+              leading: const Icon(Icons.thumbs_up_down_rounded),
+            ),
+            ListTile(
+              title: const Text("Posizione"),
+              subtitle: Text(book['location']),
+              leading: const Icon(
+                Icons.location_pin,
+              ),
+            ),
+            ListTile(
+              title: const Text("Genere"),
+              subtitle: Text(book['genres'].toString().replaceAll("[", "").replaceAll("]", "")),
+              leading: const Icon(
+                Icons.category_rounded,
+              ),
             ),
             ListTile(
               title: const Text("Abstract"),

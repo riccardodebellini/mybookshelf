@@ -4,7 +4,8 @@ import 'package:mybookshelf/sys/auth_system.dart';
 import 'package:mybookshelf/sys/firebase_options.dart';
 
 
-
+Color appColor = Colors.teal;
+Brightness appBrightness = Brightness.light;
 
 
 // RUN APP AND WAIT FOR FIREBASE
@@ -24,18 +25,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      
-      // Theming
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.lightBlue,
-            brightness: Brightness.light),
+
+
+
+    return SafeArea(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        
+        // Theming
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: appColor,
+              brightness: MediaQuery.of(context).platformBrightness,
+        ),),
+        title: "MyBookshelf",
+        home: const AuthSystem(), // Home page
       ),
-      title: "MyBookshelf",
-      home: const AuthSystem(), // Home page
     );
   }
 }
