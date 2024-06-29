@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/pages/home/subpages/genres.dart';
 import 'package:mybookshelf/pages/subpages/settings/settings.dart';
-import 'package:mybookshelf/res/books/filters.dart';
+import 'package:mybookshelf/res/filters.dart';
+
+FirebaseFirestore cloud = FirebaseFirestore.instance;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +17,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> genres = [];
+  String favGenre = "";
+  List genres = [];
   bool isGenresLoading = true; // Flag for loading state
 
   fetchGenres() async {
@@ -40,10 +44,34 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  fetchFavouriteGenre() async {
+    final docRef = FirebaseFirestore.instance
+        .collection("Data")
+        .doc(FirebaseAuth.instance.currentUser!.email)
+        .collection("settings")
+        .doc("data");
+
+    final docSnapshot = await docRef.get();
+    setState(() {
+      isGenresLoading = false;
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && data['favouriteGenre'] != null) {
+          favGenre = data['favouriteGenre'].toString();
+        } else {
+          favGenre = ""; // Empty list if data is missing
+        }
+      } else {
+        favGenre = ""; // Empty list if doc doesn't exist
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchGenres();
+    fetchFavouriteGenre();
   }
 
   @override
@@ -53,7 +81,14 @@ class _HomePageState extends State<HomePage> {
           title: const Text("Home"),
           centerTitle: true,
           actions: [
-            Tooltip(message: "Ricarica", child: IconButton(onPressed: () {fetchGenres();}, icon: Icon(Icons.sync_rounded))),
+            Tooltip(
+                message: "Ricarica",
+                child: IconButton(
+                    onPressed: () {
+                      fetchGenres();
+                      fetchFavouriteGenre();
+                    },
+                    icon: const Icon(Icons.sync_rounded))),
             MenuAnchor(
               builder: (context, controller, child) {
                 return IconButton(
@@ -86,87 +121,101 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 268,
               child: Column(
-                              children: [
-              const ListTile(
-                title: Text("Generi"),
-                subtitle: Text("Esplora i tuoi libri divisi per genere"),
-              ),
-              Expanded(
-                child: Tooltip(
-                  message: (Platform.isLinux ||
-                          Platform.isMacOS ||
-                          Platform.isWindows)
-                      ? "Usa SHIFT per scrollare"
-                      : "",
-                  child: isGenresLoading
-                      ? const Center(
-                          child:
-                              CircularProgressIndicator()) // Loading indicator
-                      : genres.isEmpty
-                          ? ListTile(
-                              title: const Text("Nessun genere trovato"),
-                              leading: CircleAvatar(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.error,
-                                foregroundColor:
-                                    Theme.of(context).colorScheme.onError,
-                                child: const Icon(Icons.error_rounded),
-                              ),
-                            )
-                          : ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return SizedBox(
-                                  width: 200,
-                                  child: Card.filled(
-                                    child: Center(
-                                        child: Text(
-                                      genres[index]
-                                          .toString()
-                                          .toUpperCase(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    )),
+                children: [
+                  const ListTile(
+                    title: Text("Generi"),
+                    subtitle: Text("Esplora i tuoi libri divisi per genere"),
+                  ),
+                  Expanded(
+                    child: Tooltip(
+                      message: (Platform.isLinux ||
+                              Platform.isMacOS ||
+                              Platform.isWindows)
+                          ? "Usa SHIFT per scrollare"
+                          : "",
+                      child: isGenresLoading
+                          ? const Center(
+                              child:
+                                  CircularProgressIndicator()) // Loading indicator
+                          : genres.isEmpty
+                              ? ListTile(
+                                  title: const Text("Nessun genere trovato"),
+                                  leading: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).colorScheme.error,
+                                    foregroundColor:
+                                        Theme.of(context).colorScheme.onError,
+                                    child: const Icon(Icons.error_rounded),
                                   ),
-                                );
-                              },
-                              itemCount: genres.length,
-                              // shrinkWrap: true,
-                            ),
-                ),
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    return SizedBox(
+                                      width: 200,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return GenresPage(
+                                                genre: genres[index]
+                                                    .toString()
+                                                    .toLowerCase());
+                                          }));
+                                        },
+                                        child: Card.filled(
+                                          child: Center(
+                                              child: Text(
+                                            genres[index]
+                                                .toString()
+                                                .toUpperCase(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                          )),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: genres.length,
+                                  // shrinkWrap: true,
+                                ),
+                    ),
+                  ),
+                ],
               ),
-                              ],
-                            ),
             ),
             const Divider(),
-            ListTile(
+            const ListTile(
               title: Text("Suggeriti"),
               subtitle: Text(
                   "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
             ),
-            FilteredView(filter: FirebaseFirestore.instance
-                .collection("Data")
-                .doc(FirebaseAuth.instance.currentUser!.email.toString())
-                .collection("books")
-                .where('genres', arrayContains: "gialli").limit(6)
-                .snapshots()),
+            FilteredView(
+                filter: cloud
+                    .collection("Data")
+                    .doc(FirebaseAuth.instance.currentUser!.email.toString())
+                    .collection("books")
+                    .where('genres', arrayContains: favGenre)
+                    .limit(4)
+                    .snapshots()),
             const Divider(),
-            ListTile(
+            const ListTile(
               title: Text("Prestiti in scadenza"),
               subtitle: Text("Tieni d'occhio i libri prossimi alla scadenza"),
             ),
-            ListTile(
+            const ListTile(
               title: Text("Suggeriti"),
               subtitle: Text(
                   "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
             ),
-            ListTile(
+            const ListTile(
               title: Text("Suggeriti"),
               subtitle: Text(
                   "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
             ),
-            ListTile(
+            const ListTile(
               title: Text("Suggeriti"),
               subtitle: Text(
                   "Ottieni suggerimenti di lettura basati sulle tue preferenze"),

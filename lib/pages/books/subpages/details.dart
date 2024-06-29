@@ -49,10 +49,10 @@ class BooksDetails extends StatelessWidget {
             ListTile(
               title: const Text("Rating"),
               subtitle: book['read'] == false
-                  ? Text("Il libro non è ancora stato letto")
+                  ? const Text("Il libro non è ancora stato letto")
                   : Row(
                       children: List.generate(book['rating'], (int index) {
-                        return Icon(Icons.star_rounded);
+                        return const Icon(Icons.star_rounded);
                       }),
                     ),
               leading: const Icon(Icons.thumbs_up_down_rounded),
@@ -66,7 +66,10 @@ class BooksDetails extends StatelessWidget {
             ),
             ListTile(
               title: const Text("Genere"),
-              subtitle: Text(book['genres'].toString().replaceAll("[", "").replaceAll("]", "")),
+              subtitle: Text(book['genres']
+                  .toString()
+                  .replaceAll("[", "")
+                  .replaceAll("]", "")),
               leading: const Icon(
                 Icons.category_rounded,
               ),

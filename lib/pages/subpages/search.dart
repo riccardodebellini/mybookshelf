@@ -16,6 +16,7 @@ class Book {
       required this.year,
       required this.author,
       required this.abstract});
+
   factory Book.fromJson(Map<String, dynamic> json) {
     final volumeInfo = json['volumeInfo'];
     return Book(

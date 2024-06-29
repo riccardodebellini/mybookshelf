@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/pages/subpages/settings/settings.dart';
 
@@ -29,7 +28,8 @@ class LendsPage extends StatelessWidget {
                 MenuItemButton(
                   child: const Text('Impostazioni'),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
                       return const SettingsPage();
                     }));
                   },
@@ -38,8 +38,6 @@ class LendsPage extends StatelessWidget {
             )
           ],
         ),
-        body: const Center(
-            child: Text("Nulla da vedere qui")
-        ));
+        body: const Center(child: Text("Nulla da vedere qui")));
   }
 }

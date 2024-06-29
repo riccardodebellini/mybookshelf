@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/res/columnbuilder.dart';
 
-import 'cards.dart';
+import 'books/cards.dart';
 
 class FilteredView extends StatefulWidget {
   final Stream<QuerySnapshot> filter;
@@ -28,6 +29,7 @@ class _FilteredViewState extends State<FilteredView> {
         final bookDocs = snapshot.data!.docs;
         return MediaQuery.of(context).size.width > 840
             ? GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, mainAxisExtent: 64),
                 itemBuilder: (context, index) {
@@ -41,10 +43,9 @@ class _FilteredViewState extends State<FilteredView> {
                   );
                 },
                 itemCount: bookDocs.length,
-          shrinkWrap: true,
+                shrinkWrap: true,
               )
-            : ListView.builder(
-          shrinkWrap: true,
+            : ColumnBuilder(
                 itemCount: bookDocs.length,
                 itemBuilder: (context, index) {
                   final bookData =

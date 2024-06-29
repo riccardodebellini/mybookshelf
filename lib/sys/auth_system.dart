@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../pages/subpages/account/login.dart';
 import 'main_navigation.dart';
 
-
 class AuthSystem extends StatelessWidget {
   const AuthSystem({super.key});
 
@@ -17,7 +16,7 @@ class AuthSystem extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return const MainNavigation();
-              }  else {
+              } else {
                 return const AccountLogInPage();
               }
             }),

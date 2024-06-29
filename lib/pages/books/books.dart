@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../res/books/filters.dart';
+import '../../res/filters.dart';
 import '../subpages/settings/settings.dart';
 
 class BooksPage extends StatefulWidget {
@@ -51,6 +51,9 @@ class _BooksPageState extends State<BooksPage> {
         ),
         body: Column(
           children: [
+            const SizedBox(
+              height: 8,
+            ),
             Center(
               child: SegmentedButton(
                 segments: const <ButtonSegment>[
@@ -76,31 +79,43 @@ class _BooksPageState extends State<BooksPage> {
                 },
               ),
             ),
-            Expanded(child: currentFilter.first == 0
+            const SizedBox(
+              height: 8,
+            ),
+            Expanded(
+                child: SingleChildScrollView(
+              child: currentFilter.first == 0
 
-            // FAVORITES
-                ? FilteredView(filter: FirebaseFirestore.instance
-                .collection("Data")
-                .doc(FirebaseAuth.instance.currentUser!.email.toString())
-                .collection("books")
-                .where('rating', isGreaterThan: 4.0)
-                .snapshots())
-                : (currentFilter.first == 1
+                  // FAVORITES
+                  ? FilteredView(
+                      filter: FirebaseFirestore.instance
+                          .collection("Data")
+                          .doc(FirebaseAuth.instance.currentUser!.email
+                              .toString())
+                          .collection("books")
+                          .where('rating', isGreaterThan: 4.0)
+                          .snapshots())
+                  : (currentFilter.first == 1
 
-            // TO READ
-                ? FilteredView(filter: FirebaseFirestore.instance
-                .collection("Data")
-                .doc(FirebaseAuth.instance.currentUser!.email.toString())
-                .collection("books")
-                .where('read', isEqualTo: false)
-                .snapshots())
+                      // TO READ
+                      ? FilteredView(
+                      filter: FirebaseFirestore.instance
+                          .collection("Data")
+                          .doc(FirebaseAuth.instance.currentUser!.email
+                          .toString())
+                          .collection("books")
+                          .where('read', isEqualTo: false)
+                          .snapshots())
 
-            // ALL BOOKS
-                : FilteredView(filter: FirebaseFirestore.instance
-                .collection("Data")
-                .doc(FirebaseAuth.instance.currentUser!.email.toString())
-                .collection("books")
-                .snapshots())),)
+                      // ALL BOOKS
+                      : FilteredView(
+                          filter: FirebaseFirestore.instance
+                              .collection("Data")
+                              .doc(FirebaseAuth.instance.currentUser!.email
+                                  .toString())
+                              .collection("books")
+                              .snapshots())),
+            ))
           ],
         ));
   }

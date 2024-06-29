@@ -21,7 +21,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '501212308848',
     projectId: 'mybookshelf-c4888',
     authDomain: 'mybookshelf-c4888.firebaseapp.com',
-    databaseURL: 'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'mybookshelf-c4888.appspot.com',
     measurementId: 'G-33XG9NMJ0Z',
   );
@@ -31,7 +32,8 @@ class DefaultFirebaseOptions {
     appId: '1:501212308848:android:d3ad2e3c82976388c39bb5',
     messagingSenderId: '501212308848',
     projectId: 'mybookshelf-c4888',
-    databaseURL: 'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'mybookshelf-c4888.appspot.com',
   );
 
@@ -40,7 +42,8 @@ class DefaultFirebaseOptions {
     appId: '1:501212308848:ios:521c4499aacd1615c39bb5',
     messagingSenderId: '501212308848',
     projectId: 'mybookshelf-c4888',
-    databaseURL: 'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'mybookshelf-c4888.appspot.com',
     iosBundleId: 'com.riccardodebellini.mybookshelf',
   );
@@ -50,7 +53,8 @@ class DefaultFirebaseOptions {
     appId: '1:501212308848:ios:521c4499aacd1615c39bb5',
     messagingSenderId: '501212308848',
     projectId: 'mybookshelf-c4888',
-    databaseURL: 'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'mybookshelf-c4888.appspot.com',
     iosBundleId: 'com.riccardodebellini.mybookshelf',
   );
@@ -61,7 +65,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '501212308848',
     projectId: 'mybookshelf-c4888',
     authDomain: 'mybookshelf-c4888.firebaseapp.com',
-    databaseURL: 'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://mybookshelf-c4888-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'mybookshelf-c4888.appspot.com',
     measurementId: 'G-X1L4QEF9H4',
   );
@@ -90,5 +95,4 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
 }

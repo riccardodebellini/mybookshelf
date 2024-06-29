@@ -127,7 +127,6 @@ class _AccountAccountLogInPageLARGEState
                               setState(() {
                                 widget.showPassword = !widget.showPassword;
                               });
-
                             },
                             icon: Icon(widget.showPassword == true
                                 ? Icons.visibility_rounded
@@ -146,7 +145,8 @@ class _AccountAccountLogInPageLARGEState
                         width: 8,
                       ),
                       FilledButton(
-                          onPressed: widget.onSubmit, child: const Text("Entra")),
+                          onPressed: widget.onSubmit,
+                          child: const Text("Entra")),
                     ],
                   )
                 ],
@@ -230,7 +230,8 @@ class _AccountAccountLogInPageSMALLState
                 const SizedBox(
                   width: 8,
                 ),
-                FilledButton(onPressed: widget.onSubmit, child: const Text("Entra")),
+                FilledButton(
+                    onPressed: widget.onSubmit, child: const Text("Entra")),
               ],
             )
           ],
@@ -292,8 +293,8 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
   }
 
   void createAccount() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const AccountCreatePage()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AccountCreatePage()));
   }
 
   // wrong email message popup

@@ -41,11 +41,11 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
                 });
               },
               destinations: const [
-
                 NavigationRailDestination(
                   icon: Icon(Icons.interests_rounded),
                   label: Text('Home'),
-                ),                NavigationRailDestination(
+                ),
+                NavigationRailDestination(
                   icon: Icon(Icons.bookmark_rounded),
                   label: Text('Libri'),
                 ),
@@ -67,11 +67,11 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
             body: pages[currentIndex],
             bottomNavigationBar: NavigationBar(
               destinations: const [
-
                 NavigationDestination(
                   icon: Icon(Icons.interests_rounded),
                   label: 'Home',
-                ),NavigationDestination(
+                ),
+                NavigationDestination(
                   icon: Icon(Icons.bookmark_rounded),
                   label: 'Libri',
                 ),
@@ -108,7 +108,6 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
                 showModalBottomSheet(
                     showDragHandle: true,
                     context: context,
-
                     builder: (context) {
                       return Padding(
                         padding: EdgeInsets.only(

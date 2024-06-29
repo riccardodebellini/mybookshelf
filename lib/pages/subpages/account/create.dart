@@ -1,9 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 
 class AccountAccountCreatePageLARGE extends StatelessWidget {
   final TextEditingController emailController;
@@ -91,14 +89,12 @@ class AccountAccountCreatePageLARGE extends StatelessWidget {
                   TextField(
                     controller: passwordController,
                     obscureText: true,
-
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Password',
-                      helperText: "Minimo 6 caratteri, una maiuscola, una minuscola e un numero",
-                      helperMaxLines: 3
-
-                    ),
+                        border: OutlineInputBorder(),
+                        labelText: 'Password',
+                        helperText:
+                            "Minimo 6 caratteri, una maiuscola, una minuscola e un numero",
+                        helperMaxLines: 3),
                   ),
                   const SizedBox(
                     height: 16,
@@ -107,8 +103,7 @@ class AccountAccountCreatePageLARGE extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: onGoBack,
-                          child: const Text("Indietro")),
+                          onPressed: onGoBack, child: const Text("Indietro")),
                       const SizedBox(
                         width: 8,
                       ),
@@ -199,11 +194,11 @@ class AccountAccountCreatePageSMALL extends StatelessWidget {
               controller: passwordController,
               obscureText: true,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
-                  helperText: "Minimo 6 caratteri, una maiuscola, una minuscola e un numero",
-                  helperMaxLines: 3
-              ),
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                  helperText:
+                      "Minimo 6 caratteri, una maiuscola, una minuscola e un numero",
+                  helperMaxLines: 3),
             ),
             const SizedBox(
               height: 16,
@@ -240,48 +235,54 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
 
-
   void backToLogin() {
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        body: Center(child: ListView(shrinkWrap: true, children: [MediaQuery.of(context).size.width > 840
-            ? Center(
-              child: SizedBox(
-                height: 350,
-                width: 840,
-                child: Card.filled(
-                  child: AccountAccountCreatePageLARGE(
-                    emailController: emailController,
-                    passwordController: passwordController,
-                    nameController: nameController,
-                    onGoBack: backToLogin,
-                    onSubmit: createUser,
-                    align: MainAxisAlignment.start,
+    return Scaffold(
+        body: Center(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          MediaQuery.of(context).size.width > 840
+              ? Center(
+                  child: SizedBox(
+                    height: 350,
+                    width: 840,
+                    child: Card.filled(
+                      child: AccountAccountCreatePageLARGE(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        nameController: nameController,
+                        onGoBack: backToLogin,
+                        onSubmit: createUser,
+                        align: MainAxisAlignment.start,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
-            : MediaQuery.of(context).size.width > 600
-            ? AccountAccountCreatePageLARGE(
-          emailController: emailController,
-          passwordController: passwordController,
-          nameController: nameController,
-          onGoBack: backToLogin,
-          onSubmit: createUser,
-          align: MainAxisAlignment.center,
-        )
-            : AccountAccountCreatePageSMALL(
-          emailController: emailController,
-          passwordController: passwordController,
-          nameController: nameController,
-          onGoBack: backToLogin,
-          onSubmit: createUser,
-          align: MainAxisAlignment.start,
-        )],),));
+                )
+              : MediaQuery.of(context).size.width > 600
+                  ? AccountAccountCreatePageLARGE(
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      nameController: nameController,
+                      onGoBack: backToLogin,
+                      onSubmit: createUser,
+                      align: MainAxisAlignment.center,
+                    )
+                  : AccountAccountCreatePageSMALL(
+                      emailController: emailController,
+                      passwordController: passwordController,
+                      nameController: nameController,
+                      onGoBack: backToLogin,
+                      onSubmit: createUser,
+                      align: MainAxisAlignment.start,
+                    )
+        ],
+      ),
+    ));
   }
 
   void createUser() async {
@@ -300,13 +301,13 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
-
       );
-      await FirebaseAuth.instance.currentUser?.updateDisplayName(nameController.text);
+      await FirebaseAuth.instance.currentUser
+          ?.updateDisplayName(nameController.text);
       await FirebaseAuth.instance.currentUser?.reload();
 
       // pop the loading circle
-     Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pop(context);
     } on FirebaseAuthException {
       // pop the loading circle

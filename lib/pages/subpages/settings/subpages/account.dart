@@ -232,7 +232,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
     );
   }
 
-void signUserOut() {
+  void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 }

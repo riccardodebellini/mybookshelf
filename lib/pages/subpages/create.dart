@@ -145,26 +145,26 @@ class _CreateBookPageState extends State<CreateBookPage> {
           ),
         ),
         ListTile(
-            title: DropdownMenu(
-              label: const Text("Posizione"),
-              // Set the currently selected value (optional)
-              dropdownMenuEntries: List.generate(locations.length, (int index) {
-                return DropdownMenuEntry(
-                  value: locations[index].toString(),
-                  label: locations[index].toString(),
-                );
-              }),
+          title: DropdownMenu(
+            label: const Text("Posizione"),
+            // Set the currently selected value (optional)
+            dropdownMenuEntries: List.generate(locations.length, (int index) {
+              return DropdownMenuEntry(
+                value: locations[index].toString(),
+                label: locations[index].toString(),
+              );
+            }),
 
-              expandedInsets: EdgeInsets.zero,
-              enableFilter: true,
-              enableSearch: true,
-              requestFocusOnTap: true,
-              errorText: locationError,
-              trailingIcon: const Icon(Icons.expand_more_rounded),
-              selectedTrailingIcon: const Icon(Icons.expand_less_rounded),
-              controller: locationController,
-            ),
-           ),
+            expandedInsets: EdgeInsets.zero,
+            enableFilter: true,
+            enableSearch: true,
+            requestFocusOnTap: true,
+            errorText: locationError,
+            trailingIcon: const Icon(Icons.expand_more_rounded),
+            selectedTrailingIcon: const Icon(Icons.expand_less_rounded),
+            controller: locationController,
+          ),
+        ),
         ListTile(
           title: TextField(
             autofocus: true,
@@ -210,20 +210,17 @@ class _CreateBookPageState extends State<CreateBookPage> {
                             : genresSelected
                                 .remove(genre.toString().toLowerCase());
                       });
-                      print(genresSelected);
                     });
               }),
             ),
-
             trailing: Tooltip(
                 message: "Altro",
                 child: IconButton(
-                    icon: Icon(Icons.add_rounded),
+                    icon: const Icon(Icons.add_rounded),
                     onPressed: () {
                       showModalBottomSheet<void>(
                         showDragHandle: true,
                         context: context,
-
                         builder: (context) {
                           return Padding(
                             padding: EdgeInsets.only(
@@ -252,7 +249,6 @@ class _CreateBookPageState extends State<CreateBookPage> {
                                         genres.add(textFieldController.text);
                                       });
 
-
                                       Navigator.pop(context);
                                       textFieldController.clear();
                                     },
@@ -264,15 +260,16 @@ class _CreateBookPageState extends State<CreateBookPage> {
                         },
                       );
                     }))),
-        SwitchListTile(value: readController, onChanged: (bool selected) {
-          setState(() {
-            readController = !readController;
-          });
-        },
-        title: Text("Questo libro è stato letto?"),
-        thumbIcon: thumbIcon,
+        SwitchListTile(
+          value: readController,
+          onChanged: (bool selected) {
+            setState(() {
+              readController = !readController;
+            });
+          },
+          title: const Text("Questo libro è stato letto?"),
+          thumbIcon: thumbIcon,
         ),
-
         ListTile(
           title: Row(
             children: [

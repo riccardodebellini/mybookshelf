@@ -1,10 +1,13 @@
 import "dart:math";
 
 import "package:flutter/material.dart";
+
 //ignore: must_be_immutable
 class SettingsSharingPage extends StatefulWidget {
-  final chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789';
+  final chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789';
   late String sharingcode = "";
+
   SettingsSharingPage({super.key});
 
   @override
@@ -24,13 +27,17 @@ class _SettingsSharingPageState extends State<SettingsSharingPage> {
             title: SelectableText(widget.sharingcode.toString()),
           ),
           ListTile(
-            title: ElevatedButton(child:  const Text("genera"), onPressed: () {
-              setState(() {
-
-                widget.sharingcode = String.fromCharCodes(List.generate(32, (index) => widget.chars.codeUnitAt(Random.secure().nextInt(widget.chars.length))));
-
-              });
-            },),
+            title: ElevatedButton(
+              child: const Text("genera"),
+              onPressed: () {
+                setState(() {
+                  widget.sharingcode = String.fromCharCodes(List.generate(
+                      32,
+                      (index) => widget.chars.codeUnitAt(
+                          Random.secure().nextInt(widget.chars.length))));
+                });
+              },
+            ),
           )
         ]),
       ),

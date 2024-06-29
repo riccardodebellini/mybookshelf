@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/res/columnBuilder.dart';
 
 class SettingsCreationPage extends StatefulWidget {
   const SettingsCreationPage({super.key});
@@ -175,7 +176,7 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                             child: const Icon(Icons.error_rounded),
                           ),
                         )
-                      : ListView.builder(
+                      : ColumnBuilder(
                           itemBuilder: (context, index) {
                             return ListTile(
                               title: Text(locations[index]),
@@ -189,9 +190,7 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                             );
                           },
                           itemCount: locations.length,
-                          shrinkWrap: true,
                         ),
-
                   ListTile(
                     leading: FilledButton.icon(
                       icon: const Icon(Icons.add_rounded),
@@ -267,7 +266,7 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                             child: const Icon(Icons.error_rounded),
                           ),
                         )
-                      : ListView.builder(
+                      : ColumnBuilder(
                           itemBuilder: (context, index) {
                             return ListTile(
                               title: Text(genres[index]),
@@ -279,16 +278,19 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                                 },
                               ),
                               trailing: IconButton(
-                                icon: favouriteGenre == genres[index] ? Icon(Icons.star_rounded) : Icon(Icons.star_border_rounded),
+                                icon: favouriteGenre == genres[index]
+                                    ? const Icon(Icons.star_rounded)
+                                    : const Icon(Icons.star_border_rounded),
                                 onPressed: () {
-                                  favouriteGenre == genres[index] ? favouriteGenre = null: favouriteGenre = genres[index];
+                                  favouriteGenre == genres[index]
+                                      ? favouriteGenre = null
+                                      : favouriteGenre = genres[index];
                                   editedFavouriteGenre();
                                 },
                               ),
                             );
                           },
                           itemCount: genres.length,
-                          shrinkWrap: true,
                         ),
                   ListTile(
                     leading: FilledButton.icon(
