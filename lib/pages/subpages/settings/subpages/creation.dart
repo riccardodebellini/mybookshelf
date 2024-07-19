@@ -245,7 +245,6 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
               ),
             ),
           ),
-          const Divider(),
           ListTile(
             title: Card.filled(
               child: Column(
@@ -253,7 +252,8 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                   const ListTile(
                     title: Text("Generi"),
                     subtitle: Text(
-                        "Aggiungi ed elimina i generi disponibili per i tuoi libri"),
+                        "Aggiungi ed elimina i generi disponibili per i tuoi libri \nContrassegna con la stellina il tuo genere preferito, lo useremo per fornirti suggerimenti di lettura!"),
+                    isThreeLine: true,
                   ),
                   genres.isEmpty
                       ? ListTile(

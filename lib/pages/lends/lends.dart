@@ -38,6 +38,18 @@ class LendsPage extends StatelessWidget {
             )
           ],
         ),
-        body: const Center(child: Text("Nulla da vedere qui")));
+        body: const Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.do_not_disturb_alt_rounded,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text("Questa sezione non è ancora disponibile, "),
+          ],
+        )));
   }
 }

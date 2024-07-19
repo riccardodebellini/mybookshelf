@@ -69,58 +69,86 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
             ),
             const Divider(),
             ListTile(
-              title: const Text("Cambia il nome visualizzato"),
-              leading: const Icon(Icons.drive_file_rename_outline_rounded),
-              trailing: FilledButton.tonal(
-                onPressed: editName,
-                child: const Text("Cambia"),
+              title: Card.filled(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: const Text("Cambia il nome visualizzato"),
+                      leading:
+                          const Icon(Icons.drive_file_rename_outline_rounded),
+                      trailing: FilledButton.tonal(
+                        onPressed: editName,
+                        child: const Text("Cambia"),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text("Cambia password"),
+                      leading: const Icon(Icons.password_rounded),
+                      trailing: FilledButton.tonal(
+                        onPressed: editPassword,
+                        child: const Text("Cambia"),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text("Effettua il logout"),
+                      leading: const Icon(Icons.logout_rounded),
+                      trailing: FilledButton.tonal(
+                        child: const Text("Esci"),
+                        onPressed: () {
+                          FirebaseAuth.instance.signOut();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             ListTile(
-              title: const Text("Cambia password"),
-              leading: const Icon(Icons.password_rounded),
-              trailing: FilledButton.tonal(
-                onPressed: editPassword,
-                child: const Text("Cambia"),
+              title: Card.filled(
+                child: Column(
+                  children: [
+                    const ListTile(
+                      title: Text("Azioni pericolose"),
+                    ),
+                    ListTile(
+                        title: const Text("Elimina il mio Account"),
+                        leading: const Icon(Icons.dangerous_rounded),
+                        trailing: ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        "Funzione in app non abilitata"),
+                                    content: const Text(
+                                        "Per eliminare l'account, invia una richiesta via e-mail a 'riccardo.debellini@gmail.com'"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text("Ok"))
+                                    ],
+                                  );
+                                });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                          ),
+                          child: Text(
+                            'ELIMINA',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onError),
+                          ),
+                        )),
+                  ],
+                ),
               ),
             ),
-            ListTile(
-              title: const Text("Effettua il logout"),
-              leading: const Icon(Icons.logout_rounded),
-              trailing: FilledButton.tonal(
-                child: const Text("Esci"),
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            const Divider(),
-            const ListTile(
-              title: Text("Azioni pericolose"),
-            ),
-            ListTile(
-                title: const Text("Elimina il mio Account"),
-                leading: const Icon(Icons.dangerous_rounded),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          behavior: SnackBarBehavior.floating,
-                          dismissDirection: DismissDirection.startToEnd,
-                          content: Text('Funzione non abilitata')),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                  ),
-                  child: Text(
-                    'ELIMINA',
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.onError),
-                  ),
-                )),
           ],
         ),
       ),

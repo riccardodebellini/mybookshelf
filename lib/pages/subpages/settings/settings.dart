@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/pages/subpages/settings/subpages/account.dart';
 import 'package:mybookshelf/pages/subpages/settings/subpages/creation.dart';
-import 'package:mybookshelf/pages/subpages/settings/subpages/sharing.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -63,7 +62,7 @@ class SettingsPage extends StatelessWidget {
                         builder: (context) => const SettingsCreationPage()));
               },
             ),
-            ListTile(
+            /*ListTile(
               title: const Text("Condivisione"),
               subtitle: const Text("Riempimento automatico campi"),
               leading: const Icon(Icons.share_rounded),
@@ -79,7 +78,7 @@ class SettingsPage extends StatelessWidget {
               subtitle: Text("Riempimento automatico campi"),
               leading: Icon(Icons.donut_large_rounded),
               onTap: null,
-            )
+            )*/
           ],
         ),
       ),

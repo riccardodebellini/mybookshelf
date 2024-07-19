@@ -206,20 +206,13 @@ class _HomePageState extends State<HomePage> {
               subtitle: Text("Tieni d'occhio i libri prossimi alla scadenza"),
             ),
             const ListTile(
-              title: Text("Suggeriti"),
-              subtitle: Text(
-                  "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
-            ),
-            const ListTile(
-              title: Text("Suggeriti"),
-              subtitle: Text(
-                  "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
-            ),
-            const ListTile(
-              title: Text("Suggeriti"),
-              subtitle: Text(
-                  "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
-            ),
+              leading: CircleAvatar(
+                child: Icon(
+                  Icons.do_not_disturb_alt_rounded,
+                ),
+              ),
+              title: Text("Questa sezione non è ancora disponibile, "),
+            )
           ],
         ));
   }

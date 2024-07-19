@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'create.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+
 class AccountAccountLogInPageLARGE extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -20,7 +22,8 @@ class AccountAccountLogInPageLARGE extends StatefulWidget {
       required this.onSubmit,
       required this.onNewUser,
       required this.align,
-      required this.showPassword});
+    required this.showPassword,
+  });
 
   @override
   State<AccountAccountLogInPageLARGE> createState() =>
@@ -42,7 +45,8 @@ class AccountAccountLogInPageSMALL extends StatefulWidget {
       required this.onSubmit,
       required this.onNewUser,
       required this.align,
-      required this.showPassword});
+    required this.showPassword,
+  });
 
   @override
   State<AccountAccountLogInPageSMALL> createState() =>
@@ -139,7 +143,15 @@ class _AccountAccountLogInPageLARGEState
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: widget.onNewUser,
+                          onPressed: () {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  "Per creare un account, scrivi una mail a 'riccardo.debellini@gmail.com'"),
+                              behavior: SnackBarBehavior.floating,
+                              dismissDirection: DismissDirection.horizontal,
+                            ));
+                          }, //widget.onNewUser,
                           child: const Text("Crea un account")),
                       const SizedBox(
                         width: 8,
@@ -244,7 +256,8 @@ class _AccountAccountLogInPageSMALLState
 class _AccountLogInPageState extends State<AccountLogInPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final bool showPassword = false;
+  final bool showPassword = true;
+  final bool isLogging = false;
 
   @override
   Widget build(BuildContext context) {
@@ -326,12 +339,14 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
 
     // try sign in
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
       // pop the loading circle
-      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "Login effettuato con successo: Benvenuto $auth.currentUser.email")));
       Navigator.pop(context);
     } on FirebaseAuthException {
       // pop the loading circle
