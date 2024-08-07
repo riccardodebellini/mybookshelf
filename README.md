@@ -5,7 +5,7 @@
 MyBookshelf is an intuitive Flutter application that lets you organize and track your personal book collection. Cataloging your books has never been easier.
 
 ## ✨LATEST UPDATE and release notes
-- _**⚠️ The app is not yet public, but will be soon**_
+- **VERSION 1.0**
 
 ## 📱 Features:
 
