@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class AccountAccountCreatePageLARGE extends StatelessWidget {
   final TextEditingController emailController;
@@ -66,6 +68,7 @@ class AccountAccountCreatePageLARGE extends StatelessWidget {
                 children: [
                   TextField(
                     controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
                     obscureText: false,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -77,6 +80,7 @@ class AccountAccountCreatePageLARGE extends StatelessWidget {
                   ),
                   TextField(
                     controller: nameController,
+                    keyboardType: TextInputType.name,
                     obscureText: false,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
@@ -170,6 +174,7 @@ class AccountAccountCreatePageSMALL extends StatelessWidget {
             ),
             TextField(
               controller: emailController,
+              keyboardType: TextInputType.emailAddress,
               obscureText: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -181,6 +186,7 @@ class AccountAccountCreatePageSMALL extends StatelessWidget {
             ),
             TextField(
               controller: nameController,
+              keyboardType: TextInputType.name,
               obscureText: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -192,6 +198,7 @@ class AccountAccountCreatePageSMALL extends StatelessWidget {
             ),
             TextField(
               controller: passwordController,
+              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -298,37 +305,45 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
 
     // try sign in
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text,
+      await supabase.auth.signUp(
         password: passwordController.text,
+        email: emailController.text,
+        data: {'name': nameController.text},
       );
-      await FirebaseAuth.instance.currentUser
-          ?.updateDisplayName(nameController.text);
-      await FirebaseAuth.instance.currentUser?.reload();
+
+      await supabase.auth.signInWithPassword(
+        password: passwordController.text,
+        email: emailController.text,
+      );
+
+      await supabase
+          .from("profile")
+          .upsert({'user_id': supabase.auth.currentUser!.id});
 
       // pop the loading circle
       Navigator.pop(context);
       Navigator.pop(context);
-    } on FirebaseAuthException {
+    } catch (e) {
       // pop the loading circle
 
       Navigator.pop(context);
       // WRONG EMAIL or PASSWORD
-      errorMessage();
+      errorMessage(e.toString());
     }
   }
 
   // wrong email message popup
-  void errorMessage() {
+  void errorMessage(String error) {
     showDialog(
       context: context,
       builder: (context) {
-        return const AlertDialog(
-          title: Text(
+        return AlertDialog(
+          title: const Text(
             'Errore:',
           ),
-          icon: Icon(Icons.error_rounded),
-          content: Text("L'account esiste già o la password è poco sicura"),
+          icon: const Icon(Icons.error_rounded),
+          content:
+              Text("$error\nL'account esiste già o la password è poco sicura"),
         );
       },
     );

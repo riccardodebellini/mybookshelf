@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/res/columnbuilder.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'books/cards.dart';
 
 class FilteredView extends StatefulWidget {
-  final Stream<QuerySnapshot> filter;
+  final PostgrestFilterBuilder<List<Map<String, dynamic>>> filter;
 
   const FilteredView({super.key, required this.filter});
 
@@ -16,45 +16,42 @@ class FilteredView extends StatefulWidget {
 class _FilteredViewState extends State<FilteredView> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: widget.filter,
+    return FutureBuilder(
+      future: widget.filter,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Error loading books');
+          print(snapshot.error);
+          return Center(child: const Text('Error loading books'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
+        if (!snapshot.hasData) {
+          return Center(child: Text("Nessun dato"));
+        }
 
-        final bookDocs = snapshot.data!.docs;
+        final books = snapshot.data!;
+
         return MediaQuery.of(context).size.width > 840
             ? GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, mainAxisExtent: 64),
                 itemBuilder: (context, index) {
-                  final bookData =
-                      bookDocs[index].data() as Map<String, dynamic>;
-                  final bookId = bookDocs[index].reference.id;
-
+                  final book = books[index];
                   return BooksCards(
-                    book: bookData,
-                    id: bookId,
+                    book: book,
                   );
                 },
-                itemCount: bookDocs.length,
+                itemCount: books.length,
                 shrinkWrap: true,
               )
             : ColumnBuilder(
-                itemCount: bookDocs.length,
+                itemCount: books.length,
                 itemBuilder: (context, index) {
-                  final bookData =
-                      bookDocs[index].data() as Map<String, dynamic>;
-                  final bookId = bookDocs[index].reference.id;
-
+                  final book = books[index];
                   return BooksCards(
-                    book: bookData,
-                    id: bookId,
+                    book: book,
                   );
                 },
               );

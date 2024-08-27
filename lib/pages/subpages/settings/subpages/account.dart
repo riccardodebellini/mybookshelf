@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class SettingsAccountPage extends StatefulWidget {
   const SettingsAccountPage({super.key});
@@ -26,30 +28,20 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
           children: [
             CircleAvatar(
               radius: 32,
-              child: Text(FirebaseAuth.instance.currentUser!.displayName != null
-                  ? FirebaseAuth.instance.currentUser!.displayName
-                      .toString()
-                      .characters
-                      .first
-                      .toUpperCase()
-                  : FirebaseAuth.instance.currentUser!.email
-                      .toString()
-                      .characters
-                      .first
-                      .toUpperCase()),
+              child: Text(
+                  "${supabase.auth.currentUser!.userMetadata!['name'].toString().characters.first.toUpperCase()}"),
             ),
             const SizedBox(
               height: 16,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
               children: [
                 Text(
                   "Ciao",
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Text(
-                  " ${FirebaseAuth.instance.currentUser!.displayName.toString()}",
+                  " ${supabase.auth.currentUser!.userMetadata!['name'] ?? " User"}",
                   style: Theme.of(context)
                       .textTheme
                       .headlineLarge!
@@ -61,7 +53,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
               height: 16,
             ),
             Text(
-              FirebaseAuth.instance.currentUser!.email.toString(),
+              supabase.auth.currentUser!.email.toString(),
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(
@@ -76,7 +68,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
                       title: const Text("Cambia il nome visualizzato"),
                       leading:
                           const Icon(Icons.drive_file_rename_outline_rounded),
-                      trailing: FilledButton.tonal(
+                      trailing: TextButton(
                         onPressed: editName,
                         child: const Text("Cambia"),
                       ),
@@ -84,7 +76,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
                     ListTile(
                       title: const Text("Cambia password"),
                       leading: const Icon(Icons.password_rounded),
-                      trailing: FilledButton.tonal(
+                      trailing: TextButton(
                         onPressed: editPassword,
                         child: const Text("Cambia"),
                       ),
@@ -92,10 +84,11 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
                     ListTile(
                       title: const Text("Effettua il logout"),
                       leading: const Icon(Icons.logout_rounded),
-                      trailing: FilledButton.tonal(
+                      trailing: FilledButton(
                         child: const Text("Esci"),
                         onPressed: () {
-                          FirebaseAuth.instance.signOut();
+                          supabase.auth.signOut();
+
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
@@ -171,8 +164,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
                 controller: newNameController,
                 decoration: InputDecoration(
                     label: const Text("Nome"),
-                    hintText:
-                        FirebaseAuth.instance.currentUser!.displayName ?? "",
+                    hintText: "Mario Rossi",
                     border: const OutlineInputBorder(),
                     errorText: error),
               ),
@@ -195,9 +187,9 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
                         },
                       );
                       try {
-                        await FirebaseAuth.instance.currentUser
-                            ?.updateDisplayName(newNameController.text);
-
+                        await supabase.auth.updateUser(UserAttributes(
+                          data: {'name': newNameController.text},
+                        ));
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
@@ -214,15 +206,15 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
                               dismissDirection: DismissDirection.startToEnd,
                               content: Text('Nome cambiato con successo')),
                         );
-                      } on FirebaseAuthException {
+                      } catch (e) {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Errore'),
-                            clipBehavior: Clip.hardEdge,
+                          SnackBar(
+                            content: Text('Errore - ${e.toString()}'),
+                            behavior: SnackBarBehavior.floating,
                           ),
                         );
                       }
@@ -243,25 +235,20 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Cambia password"),
+          title: const Text("Funzione in app non abilitata"),
           content: const Text(
-              "Per reimpostare la password, ti invieremo un'email all'indirizzo indicato al momento della registrazione"),
+              "Per cambiare la password, invia una richiesta via e-mail a 'riccardo.debellini@gmail.com' dall'indirizzo usato per la registrazione.\n\nSappiamo che è noioso.\nStiamo lavorando a un nuovo sistema di password reset in-app, che dovrebbe arrivare con la prossima versione"),
           actions: [
-            FilledButton(
+            TextButton(
                 onPressed: () {
-                  FirebaseAuth.instance.sendPasswordResetEmail(
-                      email: FirebaseAuth.instance.currentUser!.email!);
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
-                child: const Text("Procedi"))
+                child: const Text("Ok"))
           ],
         );
       },
     );
   }
 
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
-  }
 }
 // Center(child: Text(user.email!))

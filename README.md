@@ -5,7 +5,15 @@
 MyBookshelf is an intuitive Flutter application that lets you organize and track your personal book collection. Cataloging your books has never been easier.
 
 ## ✨LATEST UPDATE and release notes
+
+- **VERSION 1.1**
+    - **🔥 > ⚡ We successfully switched from Firebase to [Supabase](https://supabase.com/)**, opening
+      the road for future and more interesting updates, such as "loans" and notifications! *
+      *_✨Stay TUNED!_**
+
+
 - **VERSION 1.0**
+    - Relase
 
 ## 📱 Features:
 
@@ -32,10 +40,15 @@ MyBookshelf is an intuitive Flutter application that lets you organize and track
 
 
 ## 🔮 Potential future updates:
+
+> [!IMPORTANT]  
+> These are just **potential** new features.
+> They may not be implemented at all, anytime soon, or as described here
+
 - Edit book information to keep your library updated.
 - Loan tracking system to keep tabs on borrowed books and due dates.
 - Customizable colors and themes to customize the look of your app.
- - ISBN scan to easily add books using your smartphone camera.
- - Barcode generation for physical book labeling and easier location tracking.
+- ISBN scan to easily add books using your smartphone camera.
+- Barcode generation for physical book labeling and easier location tracking.
 
 

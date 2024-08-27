@@ -1,13 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class BooksDetails extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
-  final book;
-  final String? id;
+  final Map book;
 
-  const BooksDetails({super.key, required this.book, this.id});
+  const BooksDetails({
+    super.key,
+    required this.book,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +20,13 @@ class BooksDetails extends StatelessWidget {
           title: Text(book['title']),
           actions: [
             IconButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(context);
-                  FirebaseFirestore.instance
-                      .collection("Data")
-                      .doc(FirebaseAuth.instance.currentUser!.email)
-                      .collection("books")
-                      .doc(id)
-                      .delete();
+
+                  await supabase
+                      .from('countries')
+                      .delete()
+                      .eq('id', book['id']);
                 },
                 icon: const Icon(Icons.delete_rounded))
           ],

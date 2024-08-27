@@ -1,5 +1,4 @@
 // IMPORT
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/books/books.dart';
@@ -140,8 +139,4 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
     );
   }
 
-  // Sign OUT
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
-  }
 }

@@ -1,13 +1,11 @@
-import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/pages/home/subpages/genres.dart';
 import 'package:mybookshelf/pages/subpages/settings/settings.dart';
 import 'package:mybookshelf/res/filters.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-FirebaseFirestore cloud = FirebaseFirestore.instance;
+final supabase = Supabase.instance.client;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,49 +18,30 @@ class _HomePageState extends State<HomePage> {
   String favGenre = "";
   List genres = [];
   bool isGenresLoading = true; // Flag for loading state
+  final GlobalKey<RefreshIndicatorState> isReloading =
+      GlobalKey<RefreshIndicatorState>();
 
   fetchGenres() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-
-    final docSnapshot = await docRef.get();
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
     setState(() {
-      isGenresLoading = false;
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['genres'] != null) {
-          genres = List<String>.from(data['genres']);
-        } else {
-          genres = []; // Empty list if data is missing
-        }
+      if (userData['genres'] != null) {
+        genres = List<String>.from(userData['genres']);
       } else {
-        genres = []; // Empty list if doc doesn't exist
+        genres = [];
       }
     });
   }
 
   fetchFavouriteGenre() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-
-    final docSnapshot = await docRef.get();
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
     setState(() {
       isGenresLoading = false;
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['favouriteGenre'] != null) {
-          favGenre = data['favouriteGenre'].toString();
-        } else {
-          favGenre = ""; // Empty list if data is missing
-        }
+      if (userData['genres'] != null) {
+        favGenre = userData['favouriteGenre'];
       } else {
-        favGenre = ""; // Empty list if doc doesn't exist
+        favGenre = "";
       }
     });
   }
@@ -85,8 +64,10 @@ class _HomePageState extends State<HomePage> {
                 message: "Ricarica",
                 child: IconButton(
                     onPressed: () {
-                      fetchGenres();
-                      fetchFavouriteGenre();
+                      setState(() {
+                        isGenresLoading = true;
+                        isReloading.currentState?.show();
+                      });
                     },
                     icon: const Icon(Icons.sync_rounded))),
             MenuAnchor(
@@ -116,104 +97,96 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
-        body: ListView(
-          children: [
-            SizedBox(
-              height: 268,
-              child: Column(
-                children: [
-                  const ListTile(
-                    title: Text("Generi"),
-                    subtitle: Text("Esplora i tuoi libri divisi per genere"),
-                  ),
-                  Expanded(
-                    child: Tooltip(
-                      message: (Platform.isLinux ||
-                              Platform.isMacOS ||
-                              Platform.isWindows)
-                          ? "Usa SHIFT per scrollare"
-                          : "",
-                      child: isGenresLoading
-                          ? const Center(
-                              child:
-                                  CircularProgressIndicator()) // Loading indicator
-                          : genres.isEmpty
-                              ? ListTile(
-                                  title: const Text("Nessun genere trovato"),
-                                  leading: CircleAvatar(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.error,
-                                    foregroundColor:
-                                        Theme.of(context).colorScheme.onError,
-                                    child: const Icon(Icons.error_rounded),
-                                  ),
-                                )
-                              : ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    return SizedBox(
-                                      width: 200,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return GenresPage(
-                                                genre: genres[index]
-                                                    .toString()
-                                                    .toLowerCase());
-                                          }));
-                                        },
-                                        child: Card.filled(
-                                          child: Center(
-                                              child: Text(
-                                            genres[index]
-                                                .toString()
-                                                .toUpperCase(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
-                                          )),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  itemCount: genres.length,
-                                  // shrinkWrap: true,
-                                ),
-                    ),
-                  ),
-                ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              isGenresLoading = true;
+            });
+            fetchFavouriteGenre();
+            fetchGenres();
+          },
+          key: isReloading,
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            children: [
+              const ListTile(
+                title: Text("Generi"),
+                subtitle: Text("Esplora i tuoi libri divisi per genere"),
               ),
-            ),
-            const Divider(),
-            const ListTile(
-              title: Text("Suggeriti"),
-              subtitle: Text(
-                  "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
-            ),
-            FilteredView(
-                filter: cloud
-                    .collection("Data")
-                    .doc(FirebaseAuth.instance.currentUser!.email.toString())
-                    .collection("books")
-                    .where('genres', arrayContains: favGenre)
-                    .limit(4)
-                    .snapshots()),
-            const Divider(),
-            const ListTile(
-              title: Text("Prestiti in scadenza"),
-              subtitle: Text("Tieni d'occhio i libri prossimi alla scadenza"),
-            ),
-            const ListTile(
-              leading: CircleAvatar(
-                child: Icon(
-                  Icons.do_not_disturb_alt_rounded,
+              SizedBox(
+                height: 200,
+                child: isGenresLoading
+                    ? const Center(
+                        child: CircularProgressIndicator()) // Loading indicator
+                    : genres.isEmpty
+                        ? ListTile(
+                            title: const Text("Nessun genere trovato"),
+                            leading: CircleAvatar(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.error,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.onError,
+                              child: const Icon(Icons.error_rounded),
+                            ),
+                          )
+                        : ConstrainedBox(
+                            constraints:
+                                const BoxConstraints.tightFor(height: 200),
+                            child: CarouselView.weighted(
+                              flexWeights: const [2, 1],
+                              shrinkExtent: 100,
+                              onTap: (index) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return GenresPage(
+                                      genre: genres[index]
+                                          .toString()
+                                          .toLowerCase());
+                                }));
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.outline),
+                              ),
+                              children:
+                                  List<Widget>.generate(genres.length, (index) {
+                                return Center(
+                                  child: Text(
+                                      genres[index].toString().toUpperCase()),
+                                );
+                              }),
+                            ),
+                          ),
+              ),
+              const Divider(),
+              const ListTile(
+                title: Text("Suggeriti"),
+                subtitle: Text(
+                    "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
+              ),
+              FilteredView(
+                filter: supabase
+                    .from('books')
+                    .select()
+                    .contains('genres', '{"$favGenre"}'),
+              ),
+              const Divider(),
+              const ListTile(
+                title: Text("Prestiti in scadenza"),
+                subtitle: Text("Tieni d'occhio i libri prossimi alla scadenza"),
+              ),
+              const ListTile(
+                leading: CircleAvatar(
+                  child: Icon(
+                    Icons.do_not_disturb_alt_rounded,
+                  ),
                 ),
-              ),
-              title: Text("Questa sezione non è ancora disponibile, "),
-            )
-          ],
+                title: Text("Questa sezione non è ancora disponibile, "),
+              )
+            ],
+          ),
         ));
   }
 }

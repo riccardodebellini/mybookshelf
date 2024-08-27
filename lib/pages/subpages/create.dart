@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'search.dart';
+
+final supabase = Supabase.instance.client;
 
 class CreateBookPage extends StatefulWidget {
   final Book? data; // Optional book data for editing existing book
@@ -56,59 +57,38 @@ class _CreateBookPageState extends State<CreateBookPage> {
   List genres = [];
 
   Future fetchLocations() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-
-    final docSnapshot = await docRef.get();
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
     setState(() {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['locations'] != null) {
-          locations = List<String>.from(data['locations']);
-        } else {
-          locations = [
-            "--"
-          ]; // Set locations to an empty list if data is missing
-        }
+      if (userData['locations'] != null) {
+        locations = List<String>.from(userData['locations']);
       } else {
-        locations = [
-          "--"
-        ]; // Set locations to an empty list if doc doesn't exist
+        locations = ["--"];
       }
     });
   }
 
-// TODO genres fetching
   Future fetchGenres() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-
-    final docSnapshot = await docRef.get();
-    setState(() {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['genres'] != null) {
-          genres = List<String>.from(data['genres']);
+    try {
+      final data = await supabase.from("profile").select();
+      final userData = data[0];
+      setState(() {
+        if (userData['genres'] != null) {
+          genres = List<String>.from(userData['genres']);
         } else {
           genres = ["Nessun genere"];
         }
-      } else {
-        genres = ["Nessun genere"];
-      }
-    });
+      });
+    } catch (E) {
+      print("pippo: ${E.toString()}");
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _setInitialValues();
-    fetchLocations(); // Call fetchLocations here
+    fetchLocations();
     fetchGenres();
   }
 
@@ -244,11 +224,15 @@ class _CreateBookPageState extends State<CreateBookPage> {
                                   title: FilledButton.icon(
                                     label: const Text("Salva"),
                                     icon: const Icon(Icons.check_rounded),
-                                    onPressed: () {
+                                    onPressed: () async {
                                       setState(() {
                                         genres.add(textFieldController.text);
                                       });
-
+                                      supabase
+                                          .from('profile')
+                                          .update({'genres': genres}).eq(
+                                              'user_id',
+                                              supabase.auth.currentUser!.id);
                                       Navigator.pop(context);
                                       textFieldController.clear();
                                     },
@@ -341,15 +325,8 @@ class _CreateBookPageState extends State<CreateBookPage> {
       final year = int.tryParse(yearController.text) ?? 0000;
       final int rating = ratingController.round();
 
-      // Create a reference to the books collection
-      final booksRef = FirebaseFirestore.instance
-          .collection("Data")
-          .doc(FirebaseAuth.instance.currentUser!.email.toString())
-          .collection("books");
-
-      // Add the book data to the collection
       try {
-        await booksRef.add({
+        await supabase.from('books').insert({
           'title': title,
           'author': author,
           'location': location,
@@ -358,6 +335,7 @@ class _CreateBookPageState extends State<CreateBookPage> {
           'read': read,
           'abstract': abstract,
           'genres': genresSelected,
+          'user_id': supabase.auth.currentUser!.id
         });
 
         titleController.clear();

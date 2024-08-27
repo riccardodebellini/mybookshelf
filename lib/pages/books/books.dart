@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../res/filters.dart';
 import '../subpages/settings/settings.dart';
+
+final supabase = Supabase.instance.client;
 
 class BooksPage extends StatefulWidget {
   const BooksPage({super.key});
@@ -15,13 +16,42 @@ class BooksPage extends StatefulWidget {
 class _BooksPageState extends State<BooksPage> {
   Set<dynamic> currentFilter = {2};
 
+  PostgrestFilterBuilder<List<Map<String, dynamic>>>? favBooks;
+  PostgrestFilterBuilder<List<Map<String, dynamic>>>? unreadBooks;
+  PostgrestFilterBuilder<List<Map<String, dynamic>>>? allBooks;
+
+  loadBooks() async {
+    final fav = supabase.from('books').select().gt('rating', 4);
+    final unread = supabase.from('books').select().eq('read', false);
+    final all = supabase.from('books').select();
+    setState(() {
+      favBooks = fav as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
+      unreadBooks =
+          unread as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
+      allBooks = all as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadBooks();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Home"),
+          title: const Text("Libri"),
           actions: [
+            Tooltip(
+                message: "Ricarica",
+                child: IconButton(
+                    onPressed: () {
+                      loadBooks();
+                    },
+                    icon: const Icon(Icons.sync_rounded))),
             MenuAnchor(
               builder: (context, controller, child) {
                 return IconButton(
@@ -84,38 +114,17 @@ class _BooksPageState extends State<BooksPage> {
             ),
             Expanded(
                 child: SingleChildScrollView(
-              child: currentFilter.first == 0
+                    child: currentFilter.first == 0
 
-                  // FAVORITES
-                  ? FilteredView(
-                      filter: FirebaseFirestore.instance
-                          .collection("Data")
-                          .doc(FirebaseAuth.instance.currentUser!.email
-                              .toString())
-                          .collection("books")
-                          .where('rating', isGreaterThan: 4.0)
-                          .snapshots())
-                  : (currentFilter.first == 1
+                        // FAVORITES
+                        ? FilteredView(filter: favBooks!)
+                        : (currentFilter.first == 1
 
-                      // TO READ
-                      ? FilteredView(
-                      filter: FirebaseFirestore.instance
-                          .collection("Data")
-                          .doc(FirebaseAuth.instance.currentUser!.email
-                          .toString())
-                          .collection("books")
-                          .where('read', isEqualTo: false)
-                          .snapshots())
+                            // TO READ
+                            ? FilteredView(filter: unreadBooks!)
 
-                      // ALL BOOKS
-                      : FilteredView(
-                          filter: FirebaseFirestore.instance
-                              .collection("Data")
-                              .doc(FirebaseAuth.instance.currentUser!.email
-                                  .toString())
-                              .collection("books")
-                              .snapshots())),
-            ))
+                            // ALL BOOKS
+                        : FilteredView(filter: allBooks!))))
           ],
         ));
   }

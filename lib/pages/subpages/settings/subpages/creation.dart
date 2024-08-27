@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/res/columnBuilder.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+final supabase = Supabase.instance.client;
 
 class SettingsCreationPage extends StatefulWidget {
   const SettingsCreationPage({super.key});
@@ -17,20 +18,11 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
   String? favouriteGenre;
 
   fetchLocations() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-    final docSnapshot = await docRef.get();
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
     setState(() {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['locations'] != null) {
-          locations = List<String>.from(data['locations']);
-        } else {
-          locations = [];
-        }
+      if (userData['locations'] != null) {
+        locations = List<String>.from(userData['locations']);
       } else {
         locations = [];
       }
@@ -38,38 +30,22 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
   }
 
   fetchFavouriteGenre() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-    final docSnapshot = await docRef.get();
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
     setState(() {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['favouriteGenre'] != null) {
-          favouriteGenre = data['favouriteGenre'];
-        }
+      if (userData['genres'] != null) {
+        favouriteGenre = userData['favouriteGenre'];
+      } else {
+        favouriteGenre = "";
       }
     });
   }
-
   fetchGenres() async {
-    final docRef = FirebaseFirestore.instance
-        .collection("Data")
-        .doc(FirebaseAuth.instance.currentUser!.email)
-        .collection("settings")
-        .doc("data");
-
-    final docSnapshot = await docRef.get();
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
     setState(() {
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        if (data != null && data['genres'] != null) {
-          genres = List<String>.from(data['genres']);
-        } else {
-          genres = [];
-        }
+      if (userData['genres'] != null) {
+        genres = List<String>.from(userData['genres']);
       } else {
         genres = [];
       }
@@ -77,66 +53,28 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
   }
 
   editedLocations() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("Data")
-          .doc(FirebaseAuth.instance.currentUser!.email)
-          .collection("settings")
-          .doc("data")
-          .update({'locations': locations});
-    } on FirebaseException catch (e) {
-      if (e.code == "not-found") {
-        await FirebaseFirestore.instance
-            .collection("Data")
-            .doc(FirebaseAuth.instance.currentUser!.email)
-            .collection("settings")
-            .doc("data")
-            .set({'locations': locations});
-      }
-    }
+    await supabase.from('profile').upsert({
+      'user_id': supabase.auth.currentUser!.id,
+      'locations': locations
+    }).select();
+
     fetchLocations();
   }
 
   editedGenres() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("Data")
-          .doc(FirebaseAuth.instance.currentUser!.email)
-          .collection("settings")
-          .doc("data")
-          .update({'genres': genres});
-    } on FirebaseException catch (e) {
-      if (e.code == "not-found") {
-        await FirebaseFirestore.instance
-            .collection("Data")
-            .doc(FirebaseAuth.instance.currentUser!.email)
-            .collection("settings")
-            .doc("data")
-            .set({'genres': genres});
-      }
-    }
+    await supabase.from('profile').upsert(
+        {'user_id': supabase.auth.currentUser!.id, 'genres': genres}).select();
+
     fetchGenres();
   }
 
   editedFavouriteGenre() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection("Data")
-          .doc(FirebaseAuth.instance.currentUser!.email)
-          .collection("settings")
-          .doc("data")
-          .update({'favouriteGenre': favouriteGenre.toString()});
-    } on FirebaseException catch (e) {
-      if (e.code == "not-found") {
-        await FirebaseFirestore.instance
-            .collection("Data")
-            .doc(FirebaseAuth.instance.currentUser!.email)
-            .collection("settings")
-            .doc("data")
-            .set({'genres': genres});
-      }
-    }
-    fetchGenres();
+    await supabase.from('profile').upsert({
+      'user_id': supabase.auth.currentUser!.id,
+      'favouriteGenre': favouriteGenre
+    }).select();
+
+    fetchFavouriteGenre();
   }
 
   @override

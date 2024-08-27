@@ -1,11 +1,11 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'create.dart';
 
-FirebaseAuth auth = FirebaseAuth.instance;
+final supabase = Supabase.instance.client;
 
 class AccountAccountLogInPageLARGE extends StatefulWidget {
   final TextEditingController emailController;
@@ -15,13 +15,13 @@ class AccountAccountLogInPageLARGE extends StatefulWidget {
   final VoidCallback onNewUser;
   bool showPassword;
 
-  AccountAccountLogInPageLARGE(
-      {super.key,
-      required this.emailController,
-      required this.passwordController,
-      required this.onSubmit,
-      required this.onNewUser,
-      required this.align,
+  AccountAccountLogInPageLARGE({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.onSubmit,
+    required this.onNewUser,
+    required this.align,
     required this.showPassword,
   });
 
@@ -38,13 +38,13 @@ class AccountAccountLogInPageSMALL extends StatefulWidget {
   final VoidCallback onNewUser;
   bool showPassword;
 
-  AccountAccountLogInPageSMALL(
-      {super.key,
-      required this.emailController,
-      required this.passwordController,
-      required this.onSubmit,
-      required this.onNewUser,
-      required this.align,
+  AccountAccountLogInPageSMALL({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.onSubmit,
+    required this.onNewUser,
+    required this.align,
     required this.showPassword,
   });
 
@@ -143,7 +143,8 @@ class _AccountAccountLogInPageLARGEState
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: () {
+                          onPressed: /* () {
+
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text(
@@ -151,7 +152,8 @@ class _AccountAccountLogInPageLARGEState
                               behavior: SnackBarBehavior.floating,
                               dismissDirection: DismissDirection.horizontal,
                             ));
-                          }, //widget.onNewUser,
+                          }, //widget.onNewUser*/
+                              widget.onNewUser,
                           child: const Text("Crea un account")),
                       const SizedBox(
                         width: 8,
@@ -311,13 +313,13 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
   }
 
   // wrong email message popup
-  void errorMessage() {
+  void errorMessage(String E) {
     showDialog(
       context: context,
       builder: (context) {
-        return const AlertDialog(
+        return AlertDialog(
           title: Text(
-            'Errore:',
+            'Errore: ${E.toString()}',
           ),
           icon: Icon(Icons.error_rounded),
           content: Text("L'email o la password sono errate"),
@@ -339,21 +341,24 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
 
     // try sign in
     try {
-      await auth.signInWithEmailAndPassword(
-        email: emailController.text,
+      await supabase.auth.signInWithPassword(
         password: passwordController.text,
+        email: emailController.text,
       );
+
       // pop the loading circle
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          dismissDirection: DismissDirection.horizontal,
           content: Text(
-              "Login effettuato con successo: Benvenuto $auth.currentUser.email")));
+              "Login effettuato con successo: Benvenuto ${supabase.auth.currentUser!.email}")));
       Navigator.pop(context);
-    } on FirebaseAuthException {
+    } catch (E) {
       // pop the loading circle
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       // WRONG EMAIL or PASSWORD
-      errorMessage();
+      errorMessage(E.toString());
     }
   }
 }

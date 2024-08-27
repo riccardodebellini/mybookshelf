@@ -24,7 +24,6 @@ class BooksCards extends StatelessWidget {
           MaterialPageRoute(
               builder: (context) => BooksDetails(
                     book: book,
-                    id: id,
                   )),
         );
       },
