@@ -1,5 +1,5 @@
 name: 🐛 Segnala un Bug
-about: Hai trovato un bug? Segnalalo!
+description: Hai trovato un bug? Segnalalo!
 title: "[Bug]: "
 labels: ["bug", "triage"]
 assignees:
