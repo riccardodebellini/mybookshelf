@@ -2,7 +2,7 @@ name: "🐛 Ho trovato un Bug"
 description: "Hai trovato un bug? Segnalalo!"
 title: "Nuovo Bug Segnalato"
 
-fields:
+body:
   - type: textarea
     id: what-happened
     label: "Cosa è successo?"
