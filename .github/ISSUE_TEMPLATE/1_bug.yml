@@ -1,8 +1,8 @@
-- name: "🐛 Ho trovato un Bug"
-- description: Hai trovato un bug? Segnalalo!
-- title: "[Bug]: "
-- labels: ["bug", "triage"]
-- assignees:
+name: "🐛 Ho trovato un Bug"
+description: Hai trovato un bug? Segnalalo!
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
   - riccardodebellini
 body:
   - type: textarea
