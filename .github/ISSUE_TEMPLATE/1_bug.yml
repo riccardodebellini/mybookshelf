@@ -1,4 +1,4 @@
-name: 🐛 Ho trovato un Bug
+name: "🐛 Ho trovato un Bug"
 description: Hai trovato un bug? Segnalalo!
 title: "[Bug]: "
 labels: ["bug", "triage"]
