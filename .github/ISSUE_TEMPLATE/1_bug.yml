@@ -56,6 +56,7 @@ body:
       value: Windows
   - type: checkboxes
     id: terms
+    label: hello
     attributes:
       label: L'app è originale
       description: Inviando la richiesta, dichiaro di star usando una versione originale della app come è stata pensata, sviluppata e distribuita da riccardodebellini.github.io, senza modifiche o distribuzioni non autorizzate. 
