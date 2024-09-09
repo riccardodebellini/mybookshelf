@@ -137,7 +137,11 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                         showModalBottomSheet<void>(
                             showDragHandle: true,
                             context: context,
-                            constraints: const BoxConstraints(maxWidth: 600),
+                            constraints: BoxConstraints(
+                              maxWidth: 600,
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.7,
+                            ),
                             builder: (context) {
                               return Padding(
                                 padding: EdgeInsets.only(
@@ -236,6 +240,11 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                       label: const Text("Aggiungi"),
                       onPressed: () {
                         showModalBottomSheet<void>(
+                            constraints: BoxConstraints(
+                              maxWidth: 600,
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.7,
+                            ),
                             showDragHandle: true,
                             context: context,
                             builder: (context) {

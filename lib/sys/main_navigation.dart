@@ -106,6 +106,10 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
 
                 showModalBottomSheet(
                     showDragHandle: true,
+                    constraints: BoxConstraints(
+                      maxWidth: 600,
+                      maxHeight: MediaQuery.of(context).size.height * 0.7,
+                    ),
                     context: context,
                     builder: (context) {
                       return Padding(
@@ -121,6 +125,10 @@ class _ResponsiveScaffoldState extends State<MainNavigation> {
               onPressed: () {
                 Navigator.pop(context);
                 showModalBottomSheet<void>(
+                    constraints: BoxConstraints(
+                      maxWidth: 600,
+                      maxHeight: MediaQuery.of(context).size.height * 0.7,
+                    ),
                     useSafeArea: true,
                     showDragHandle: true,
                     context: context,

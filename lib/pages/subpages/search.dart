@@ -43,7 +43,10 @@ class BookListTile extends StatelessWidget {
         showModalBottomSheet<void>(
             showDragHandle: true,
             context: context,
-            constraints: const BoxConstraints(maxWidth: 600),
+            constraints: BoxConstraints(
+              maxWidth: 600,
+              maxHeight: MediaQuery.of(context).size.height * 0.7,
+            ),
             builder: (context) {
               return Padding(
                 padding: EdgeInsets.only(

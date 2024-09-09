@@ -197,6 +197,10 @@ class _CreateBookPageState extends State<CreateBookPage> {
                       showModalBottomSheet<void>(
                         showDragHandle: true,
                         context: context,
+                        constraints: BoxConstraints(
+                          maxWidth: 600,
+                          maxHeight: MediaQuery.of(context).size.height * 0.7,
+                        ),
                         builder: (context) {
                           return Padding(
                             padding: EdgeInsets.only(

@@ -308,7 +308,7 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
   void createAccount() {
     /* Navigator.push(context,
         MaterialPageRoute(builder: (context) => const AccountCreatePage()));*/
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
           "Per questioni di T&C e Privacy Policy, è attualmente disabilitata la creazione di account"),
       behavior: SnackBarBehavior.floating,
@@ -321,12 +321,12 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             'Errore',
           ),
-          icon: Icon(Icons.error_rounded),
+          icon: const Icon(Icons.error_rounded),
           content: ListTile(
-            title: Text("L'email o la password sono errate"),
+            title: const Text("L'email o la password sono errate"),
             subtitle: Text(E.toString()),
           ),
         );
