@@ -21,7 +21,7 @@ void main() async {
   );
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarContrastEnforced: false,
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,

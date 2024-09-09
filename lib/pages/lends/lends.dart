@@ -12,8 +12,6 @@ class LendsPage extends StatefulWidget {
 }
 
 class _LendsPageState extends State<LendsPage> {
-  final _future = supabase.from('books').select();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,15 +46,12 @@ class _LendsPageState extends State<LendsPage> {
             )
           ],
         ),
-        body: Column(
+        body: /* Column(
           children: [
             FilledButton(
                 onPressed: () async {
-                  final res = await supabase.auth.signInWithPassword(
-                      email: 'dev@example.com', password: 'Dev1234');
-                  print(res.toString());
                 },
-                child: Text("Login")),
+                child: const Text("Login")),
             FilledButton(
                 onPressed: () async {
                   await supabase.from('books').upsert({
@@ -77,12 +72,12 @@ class _LendsPageState extends State<LendsPage> {
               future: _future,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Text("data");
+                  return const Text("data");
                 }
                 final books = snapshot.data!;
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: books.length,
                   itemBuilder: ((context, index) {
                     final book = books[index];
@@ -94,12 +89,9 @@ class _LendsPageState extends State<LendsPage> {
               },
             ),
           ],
-        ));
-  }
-}
-
-/* const Center(
-            child: Column(
+        )*/
+            const Center(
+                child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
@@ -110,5 +102,9 @@ class _LendsPageState extends State<LendsPage> {
             ),
             Text("Questa sezione non è ancora disponibile, "),
           ],
-        ))
+        )));
+  }
+}
+
+/*
 */

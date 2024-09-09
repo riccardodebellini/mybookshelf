@@ -69,7 +69,6 @@ class _CreateBookPageState extends State<CreateBookPage> {
   }
 
   Future fetchGenres() async {
-    try {
       final data = await supabase.from("profile").select();
       final userData = data[0];
       setState(() {
@@ -79,9 +78,6 @@ class _CreateBookPageState extends State<CreateBookPage> {
           genres = ["Nessun genere"];
         }
       });
-    } catch (E) {
-      print("pippo: ${E.toString()}");
-    }
   }
 
   @override

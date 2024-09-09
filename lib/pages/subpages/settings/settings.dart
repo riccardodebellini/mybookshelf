@@ -91,7 +91,7 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         ListTile(
-          title: Text("Creato con il 💙 da Riccardo Debellini"),
+          title: const Text("Creato con il 💙 da Riccardo Debellini"),
           onTap: () {
             launchUrl(Uri.parse('https://riccardodebellini.github.io'));
           },

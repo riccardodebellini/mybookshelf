@@ -39,11 +39,13 @@ dependencies:
   http: ^1.2.1
   supabase_flutter: ^2.5.11
   url_launcher: ^6.3.0
+  bitsdojo_window: ^0.1.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: "^0.13.1"
+  flutter_lints: ^4.0.0
 
 flutter_launcher_icons:
   web:

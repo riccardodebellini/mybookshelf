@@ -6,13 +6,13 @@ MyBookshelf is an intuitive Flutter application that lets you organize and track
 
 ## ✨LATEST UPDATE and release notes
 
-- **VERSION 1.1**
+- **VERSION 0.2**
     - **🔥 > ⚡ We successfully switched from Firebase to [Supabase](https://supabase.com/)**, opening
-      the road for future and more interesting updates, such as "loans" and notifications! *
-      *_✨Stay TUNED!_**
+      the road for future and more interesting updates, such as "loans" and notifications!
+      **_✨Stay TUNED!_**
 
 
-- **VERSION 1.0**
+- **VERSION 0.1**
     - Relase
 
 ## 📱 Features:

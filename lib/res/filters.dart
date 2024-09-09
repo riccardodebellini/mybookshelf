@@ -20,14 +20,13 @@ class _FilteredViewState extends State<FilteredView> {
       future: widget.filter,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print(snapshot.error);
-          return Center(child: const Text('Error loading books'));
+          return const Center(child: Text('Error loading books'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData) {
-          return Center(child: Text("Nessun dato"));
+          return const Center(child: Text("Nessun dato"));
         }
 
         final books = snapshot.data!;

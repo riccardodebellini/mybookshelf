@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'create.dart';
-
 final supabase = Supabase.instance.client;
 
 class AccountAccountLogInPageLARGE extends StatefulWidget {
@@ -308,8 +306,13 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
   }
 
   void createAccount() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AccountCreatePage()));
+    /* Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AccountCreatePage()));*/
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+          "Per questioni di T&C e Privacy Policy, è attualmente disabilitata la creazione di account"),
+      behavior: SnackBarBehavior.floating,
+    ));
   }
 
   // wrong email message popup
@@ -319,10 +322,13 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            'Errore: ${E.toString()}',
+            'Errore',
           ),
           icon: Icon(Icons.error_rounded),
-          content: Text("L'email o la password sono errate"),
+          content: ListTile(
+            title: Text("L'email o la password sono errate"),
+            subtitle: Text(E.toString()),
+          ),
         );
       },
     );

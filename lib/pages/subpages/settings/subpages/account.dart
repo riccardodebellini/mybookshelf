@@ -28,8 +28,11 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
           children: [
             CircleAvatar(
               radius: 32,
-              child: Text(
-                  "${supabase.auth.currentUser!.userMetadata!['name'].toString().characters.first.toUpperCase()}"),
+              child: Text(supabase.auth.currentUser!.userMetadata!['name']
+                  .toString()
+                  .characters
+                  .first
+                  .toUpperCase()),
             ),
             const SizedBox(
               height: 16,
