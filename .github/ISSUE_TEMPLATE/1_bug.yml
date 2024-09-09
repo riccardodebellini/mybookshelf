@@ -47,11 +47,14 @@ body:
       options:
         - Web (riccardodebellini.github.io/mybookshelf)
         - App
+      validations:
+        required: true
   - type: input
     id: version
     attributes:
       label: Versione
-      description: Che versione stai usando?
-      placeholder:  Windows
-      value: Windows
+      description: Che versione stai usando? (Rispondi solo se usi l'app, non la versione web)
+      placeholder:  1.0.0
+      value: 0.2
+
 
