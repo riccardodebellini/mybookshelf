@@ -1,10 +1,10 @@
-name: "🐛 Ho trovato un Bug"
-description: Hai trovato un bug? Segnalalo!
-title: "[Bug]: "
-labels: ["bug", "triage"]
-assignees:
+- name: "🐛 Ho trovato un Bug"
+- description: Hai trovato un bug? Segnalalo!
+- title: "[Bug]: "
+- labels: ["bug", "triage"]
+- assignees:
   - riccardodebellini
-body:
+- body:
   - type: textarea
     id: what-happened
     attributes:
@@ -14,7 +14,7 @@ body:
       value: "è successo qualcosa"
     validations:
       required: true
-- type: input
+  - type: input
     id: where
     attributes:
       label: Dove è successo?
@@ -52,7 +52,7 @@ body:
     attributes:
       label: Versione
       description: Che versione stai usando?
--  type: checkboxes
+  -  type: checkboxes
     id: terms
     attributes:
       label: "L'app è originale"
