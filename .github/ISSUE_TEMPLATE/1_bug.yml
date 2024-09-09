@@ -1,74 +1,62 @@
 name: "🐛 Ho trovato un Bug"
-description: "Hai trovato un bug? Segnalalo!"
-title: "Nuovo Bug Segnalato"
-
+description: Hai trovato un bug? Segnalalo!
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees:
+  - riccardodebellini
 body:
   - type: textarea
     id: what-happened
-    label: "Cosa è successo?"
-    description: "Descrivi il problema in dettaglio."
-    placeholder: "Dì quello che vedi"
-    required: true
-
-  - type: select
+    attributes:
+      label: Dicci cosa è successo!
+      description: Dicci anche quello che ti aspettavi succedesse!
+      placeholder: Dì quello che vedi
+      value: "è successo qualcosa"
+    validations:
+      required: true
+  - type: input
     id: where
-    label: "Dove è successo?"
-    options:
-      - Home
-      - Pagina di ricerca
-      - Profilo utente
-      - Checkout
-      - Altro
-    required: true
-
-  - type: checkboxes
-    id: operating-systems
-    label: "Sistemi operativi"
-    options:
-      - Windows 10
-      - Windows 11
-      - macOS Monterey
-      - Ubuntu 22.04
-      - ...
-    required: true
-
-  - type: select
-    id: browser
-    label: "Browser"
-    options:
-      - Chrome
-      - Firefox
-      - Safari
-      - Edge
-    required: true
-
-  - type: checkboxes
+    attributes:
+      label: Dove è successo?
+      description: "Dicci dove è successo l'errore"
+      placeholder: Home/Suggeriti...
+      value: "Home/"
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      multiple: true
+      label: Sistemi operativi
+      description: "Su quale (o quali) sitema operativo trovi l'errore?"
+      options:
+        - Windows
+        - Android
+        - iOS
+        - MacOS
+        - Linux
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
     id: edition
-    label: "Edizione"
-    options:
-      - Web
-      - App mobile
-      - App desktop
-    required: true
-
-  - type: text
+    attributes:
+      label: Edizione
+      description: "Su quale (o quali) edizioni trovi l'errore?"
+      multiple: true
+      options:
+        - Web (riccardodebellini.github.io/mybookshelf)
+        - App
+  - type: input
     id: version
-    label: "Versione"
-    description: "Trova la versione in Impostazioni > Informazioni"
-    required: true
-
-  - type: textarea
-    id: steps-to-reproduce
-    label: "Passi per riprodurre"
-    description: "Descrivi passo dopo passo come riprodurre il problema."
-    required: true
-
-  - type: file
-    id: attachments
-    label: "Allegati"
-
-  - type: checkbox
-    id: is-original-app
-    label: "L'app è originale"
-    description: "Sto utilizzando la versione ufficiale dell'app."
-    required: true
+    attributes:
+      label: Versione
+      description: Che versione stai usando?
+  -  type: checkboxes
+    id: terms
+    attributes:
+      label: "L'app è originale"
+      description: "Inviando la richiesta, dichiaro di star usando una versione originale della app come è stata pensata, sviluppata e distribuita da riccardodebellini.github.io, senza modifiche o distribuzioni non autorizzate. 
+      options:
+        - label: Sto usando una app originale
+        - required: true
