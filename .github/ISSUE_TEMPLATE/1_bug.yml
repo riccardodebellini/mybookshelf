@@ -6,57 +6,57 @@ assignees:
   - riccardodebellini
 body:
   - type: textarea
-    id: what-happened
-    attributes:
-      label: Dicci cosa è successo!
-      description: Dicci anche quello che ti aspettavi succedesse!
-      placeholder: Dì quello che vedi
-      value: "è successo qualcosa"
-    validations:
-      required: true
+      id: what-happened
+      attributes:
+        label: Dicci cosa è successo!
+        description: Dicci anche quello che ti aspettavi succedesse!
+        placeholder: Dì quello che vedi
+        value: "è successo qualcosa"
+      validations:
+        required: true
   - type: input
-    id: where
-    attributes:
-      label: Dove è successo?
-      description: "Dicci dove è successo l'errore"
-      placeholder: Home/Suggeriti...
-      value: "Home/"
-    validations:
-      required: true
+      id: where
+      attributes:
+        label: Dove è successo?
+        description: "Dicci dove è successo l'errore"
+        placeholder: Home/Suggeriti...
+        value: "Home/"
+      validations:
+        required: true
   - type: dropdown
-    id: device
-    attributes:
-      multiple: true
-      label: Sistemi operativi
-      description: "Su quale (o quali) sitema operativo trovi l'errore?"
-      options:
-        - Windows
-        - Android
-        - iOS
-        - MacOS
-        - Linux
-      default: 0
-    validations:
-      required: true
+      id: device
+      attributes:
+        multiple: true
+        label: Sistemi operativi
+        description: "Su quale (o quali) sitema operativo trovi l'errore?"
+        options:
+          - Windows
+          - Android
+          - iOS
+          - MacOS
+          - Linux
+        default: 0
+      validations:
+        required: true
   - type: dropdown
-    id: edition
-    attributes:
-      label: Edizione
-      description: "Su quale (o quali) edizioni trovi l'errore?"
-      multiple: true
-      options:
-        - Web (riccardodebellini.github.io/mybookshelf)
-        - App
+      id: edition
+      attributes:
+        label: Edizione
+        description: "Su quale (o quali) edizioni trovi l'errore?"
+        multiple: true
+        options:
+          - Web (riccardodebellini.github.io/mybookshelf)
+          - App
   - type: input
-    id: version
-    attributes:
-      label: Versione
-      description: Che versione stai usando?
-  -  type: checkboxes
-    id: terms
-    attributes:
-      label: "L'app è originale"
-      description: "Inviando la richiesta, dichiaro di star usando una versione originale della app come è stata pensata, sviluppata e distribuita da riccardodebellini.github.io, senza modifiche o distribuzioni non autorizzate. 
-      options:
-        - label: Sto usando una app originale
-        - required: true
+      id: version
+      attributes:
+        label: Versione
+        description: Che versione stai usando?
+  - type: checkboxes
+        id: terms
+        attributes:
+        label: "L'app è originale"
+        description: "Inviando la richiesta, dichiaro di star usando una versione originale della app come è stata pensata, sviluppata e distribuita da riccardodebellini.github.io, senza modifiche o distribuzioni non autorizzate. 
+       options:
+          - label: Sto usando una app originale
+          - required: true
