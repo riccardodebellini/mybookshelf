@@ -1,4 +1,4 @@
-name: 🐛 Segnala un Bug
+name: 🐛 Ho trovato un Bug
 description: Hai trovato un bug? Segnalalo!
 title: "[Bug]: "
 labels: ["bug", "triage"]
@@ -8,44 +8,55 @@ body:
   - type: textarea
     id: what-happened
     attributes:
-      label: What happened?
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
+      label: Dicci cosa è successo!
+      description: Dicci anche quello che ti aspettavi succedesse!
+      placeholder: Dì quello che vedi
+      value: "è successo qualcosa"
+    validations:
+      required: true
+- type: input
+    id: where
+    attributes:
+      label: Dove è successo?
+      description: "Dicci dove è successo l'errore"
+      placeholder: Home/Suggeriti...
+      value: "Home/"
     validations:
       required: true
   - type: dropdown
-    id: version
+    id: device
     attributes:
-      label: Version
-      description: What version of our software are you running?
+      multiple: true
+      label: Sistemi operativi
+      description: "Su quale (o quali) sitema operativo trovi l'errore?"
       options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
+        - Windows
+        - Android
+        - iOS
+        - MacOS
+        - Linux
       default: 0
     validations:
       required: true
   - type: dropdown
-    id: browsers
+    id: edition
     attributes:
-      label: What browsers are you seeing the problem on?
+      label: Edizione
+      description: "Su quale (o quali) edizioni trovi l'errore?"
       multiple: true
       options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-  - type: textarea
-    id: logs
+        - Web (riccardodebellini.github.io/mybookshelf)
+        - App
+  - type: input
+    id: version
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
-  - type: checkboxes
+      label: Versione
+      description: Che versione stai usando?
+-  type: checkboxes
     id: terms
     attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com). 
+      label: "L'app è originale"
+      description: "Inviando la richiesta, dichiaro di star usando una versione originale della app come è stata pensata, sviluppata e distribuita da riccardodebellini.github.io, senza modifiche o distribuzioni non autorizzate. 
       options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
+        - label: Sto usando una app originale
+        - required: true
