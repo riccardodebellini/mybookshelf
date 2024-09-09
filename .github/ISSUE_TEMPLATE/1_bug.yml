@@ -56,6 +56,5 @@ body:
       description: Che versione stai usando? (Rispondi solo se usi l'app, non la versione web)
       placeholder:  "1.0.0"
       value: "0.2"
-    validations:
-      required: true
+
 
