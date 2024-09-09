@@ -1,5 +1,7 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: deploy MyBookshelf
+
+on: 
   # Runs on pushes targeting the default branch
   push:
     branches: ["master"]
