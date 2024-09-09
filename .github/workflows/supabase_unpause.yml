@@ -3,6 +3,7 @@ name: Get Supabase Data Daily
 on:
   schedule:
     - cron: '0 17 * * *'  # Runs at 5:00 PM everyday (UTC)
+  workflow_run:
 
 jobs:
   get-data:
