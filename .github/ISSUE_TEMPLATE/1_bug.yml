@@ -52,6 +52,8 @@ body:
     attributes:
       label: Versione
       description: Che versione stai usando?
+      placeholder:  Windows
+      value: Windows
   - type: checkboxes
     id: terms
     attributes:
