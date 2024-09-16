@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/pages/lends/subpages/details.dart';
 
 import '../../pages/books/subpages/details.dart';
 
@@ -16,16 +17,24 @@ class BooksCards extends StatelessWidget {
         book['title'].toString().toUpperCase(),
       ),
       subtitle: Text(
-        '${book['author']} - ${book['rating'].round()}',
+        '${book['author'] ?? book['location']} - ${book['rating']?.round() ?? book['due']}',
       ),
       onTap: () {
-        Navigator.push(
-          context,
+        book['due'] != null
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LendDetails(
+                          book: book,
+                        )),
+              )
+            : Navigator.push(
+                context,
           MaterialPageRoute(
               builder: (context) => BooksDetails(
-                    book: book,
-                  )),
-        );
+                          book: book,
+                        )),
+              );
       },
     );
   }

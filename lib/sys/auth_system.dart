@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../pages/subpages/account/login.dart';
-import 'main_navigation.dart';
 
 class AuthSystem extends StatelessWidget {
-  const AuthSystem({super.key});
+  final Widget userLogged;
+  final Widget userNotLogged;
+
+  const AuthSystem(
+      {super.key, required this.userLogged, required this.userNotLogged});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +17,10 @@ class AuthSystem extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.data?.session?.user.id != null) {
             // User is authenticated
-            return const MainNavigation();
+            return userLogged;
           } else {
             // User is not authenticated
-            return const AccountLogInPage();
+            return userNotLogged;
           }
         },
       ),

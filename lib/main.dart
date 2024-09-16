@@ -1,8 +1,9 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mybookshelf/sys/auth_system.dart';
 import 'package:mybookshelf/sys/firebase_options.dart';
+import 'package:mybookshelf/pages/navigation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Color appColor = Colors.teal;
@@ -27,6 +28,10 @@ void main() async {
     systemNavigationBarColor: Colors.transparent,
     systemStatusBarContrastEnforced: false,
   ));
+
+  doWhenWindowReady(() {
+    appWindow.minSize = Size(400, 400);
+  });
   runApp(const MyApp());
 }
 
@@ -48,7 +53,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       title: "MyBookshelf",
-      home: const AuthSystem(), // Home page
+      home: const Navigation(), // Home page
     );
   }
 }

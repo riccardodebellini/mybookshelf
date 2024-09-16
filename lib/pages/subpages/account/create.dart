@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -62,60 +63,65 @@ class AccountAccountCreatePageLARGE extends StatelessWidget {
               width: 32,
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Indirizzo email',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextField(
-                    controller: nameController,
-                    keyboardType: TextInputType.name,
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Nome',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
+              child: AutofillGroup(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      obscureText: false,
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Password',
-                        helperText:
-                            "Minimo 6 caratteri, una maiuscola, una minuscola e un numero",
-                        helperMaxLines: 3),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: onGoBack, child: const Text("Indietro")),
-                      const SizedBox(
-                        width: 8,
+                        labelText: 'Indirizzo email',
                       ),
-                      FilledButton(
-                          onPressed: onSubmit, child: const Text("Crea")),
-                    ],
-                  )
-                ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextField(
+                      controller: nameController,
+                      keyboardType: TextInputType.name,
+                      obscureText: false,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Nome',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextField(
+                      controller: passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      autofillHints: const [AutofillHints.newPassword],
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Password',
+                          helperText:
+                              "Minimo 6 caratteri, una maiuscola, una minuscola e un numero",
+                          helperMaxLines: 3),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: onGoBack, child: const Text("Indietro")),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        FilledButton(
+                            onPressed: onSubmit, child: const Text("Crea")),
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],
@@ -175,6 +181,7 @@ class AccountAccountCreatePageSMALL extends StatelessWidget {
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
+              autofillHints: const [AutofillHints.email],
               obscureText: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -199,6 +206,7 @@ class AccountAccountCreatePageSMALL extends StatelessWidget {
             TextField(
               controller: passwordController,
               keyboardType: TextInputType.visiblePassword,
+              autofillHints: const [AutofillHints.newPassword],
               obscureText: true,
               decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -323,6 +331,7 @@ class _AccountCreatePageState extends State<AccountCreatePage> {
       // pop the loading circle
       Navigator.pop(context);
       Navigator.pop(context);
+      TextInput.finishAutofillContext;
     } catch (e) {
       // pop the loading circle
 

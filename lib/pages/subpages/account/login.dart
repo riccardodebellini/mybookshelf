@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mybookshelf/pages/subpages/account/create.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -103,65 +105,71 @@ class _AccountAccountLogInPageLARGEState
               width: 32,
             ),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextField(
-                    controller: widget.emailController,
-                    obscureText: false,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Indirizzo email',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  TextField(
-                    controller: widget.passwordController,
-                    obscureText: widget.showPassword,
-                    decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                widget.showPassword = !widget.showPassword;
-                              });
-                            },
-                            icon: Icon(widget.showPassword == true
-                                ? Icons.visibility_rounded
-                                : Icons.visibility_off_rounded))),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: /* () {
-
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text(
-                                  "Per creare un account, scrivi una mail a 'riccardo.debellini@gmail.com'"),
-                              behavior: SnackBarBehavior.floating,
-                              dismissDirection: DismissDirection.horizontal,
-                            ));
-                          }, //widget.onNewUser*/
-                              widget.onNewUser,
-                          child: const Text("Crea un account")),
-                      const SizedBox(
-                        width: 8,
+              child: AutofillGroup(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextField(
+                      controller: widget.emailController,
+                      obscureText: false,
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Indirizzo email',
                       ),
-                      FilledButton(
-                          onPressed: widget.onSubmit,
-                          child: const Text("Entra")),
-                    ],
-                  )
-                ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    TextField(
+                      controller: widget.passwordController,
+                      obscureText: widget.showPassword,
+                      keyboardType: TextInputType.visiblePassword,
+                      autofillHints: const [AutofillHints.password],
+                      decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  widget.showPassword = !widget.showPassword;
+                                });
+                              },
+                              icon: Icon(widget.showPassword == true
+                                  ? Icons.visibility_rounded
+                                  : Icons.visibility_off_rounded))),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                            onPressed: /* () {
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text(
+                                    "Per creare un account, scrivi una mail a 'riccardo.debellini@gmail.com'"),
+                                behavior: SnackBarBehavior.floating,
+                                dismissDirection: DismissDirection.horizontal,
+                              ));
+                            }, //widget.onNewUser*/
+                                widget.onNewUser,
+                            child: const Text("Crea un account")),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        FilledButton(
+                            onPressed: widget.onSubmit,
+                            child: const Text("Entra")),
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],
@@ -178,75 +186,81 @@ class _AccountAccountLogInPageSMALLState
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.menu_book_rounded,
-              size: 50,
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              "Accedi",
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              "Utilizza il tuo Account MyBookshelf",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(
-              height: 32,
-            ),
-            TextField(
-              controller: widget.emailController,
-              obscureText: false,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Indirizzo email',
+        child: AutofillGroup(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.menu_book_rounded,
+                size: 50,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            TextField(
-              controller: widget.passwordController,
-              obscureText: widget.showPassword,
-              decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          widget.showPassword = !widget.showPassword;
-                        });
-                      },
-                      icon: Icon(widget.showPassword == true
-                          ? Icons.visibility_rounded
-                          : Icons.visibility_off_rounded))),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                    onPressed: widget.onNewUser,
-                    child: const Text("Crea un account")),
-                const SizedBox(
-                  width: 8,
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
+                "Accedi",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                "Utilizza il tuo Account MyBookshelf",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              TextField(
+                controller: widget.emailController,
+                obscureText: false,
+                keyboardType: TextInputType.emailAddress,
+                autofillHints: const [AutofillHints.email],
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Indirizzo email',
                 ),
-                FilledButton(
-                    onPressed: widget.onSubmit, child: const Text("Entra")),
-              ],
-            )
-          ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              TextField(
+                controller: widget.passwordController,
+                obscureText: widget.showPassword,
+                keyboardType: TextInputType.visiblePassword,
+                autofillHints: const [AutofillHints.password],
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Password',
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            widget.showPassword = !widget.showPassword;
+                          });
+                        },
+                        icon: Icon(widget.showPassword == true
+                            ? Icons.visibility_rounded
+                            : Icons.visibility_off_rounded))),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                      onPressed: widget.onNewUser,
+                      child: const Text("Crea un account")),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  FilledButton(
+                      onPressed: widget.onSubmit, child: const Text("Entra")),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -306,8 +320,8 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
   }
 
   void createAccount() {
-    /* Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AccountCreatePage()));*/
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AccountCreatePage()));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
           "Per questioni di T&C e Privacy Policy, è attualmente disabilitata la creazione di account"),
@@ -351,13 +365,14 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
         password: passwordController.text,
         email: emailController.text,
       );
-
+      TextInput.finishAutofillContext();
       // pop the loading circle
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           behavior: SnackBarBehavior.floating,
           dismissDirection: DismissDirection.horizontal,
           content: Text(
               "Login effettuato con successo: Benvenuto ${supabase.auth.currentUser!.email}")));
+
       Navigator.pop(context);
     } catch (E) {
       // pop the loading circle

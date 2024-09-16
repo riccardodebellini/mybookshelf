@@ -48,13 +48,16 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter_launcher_icons:
+  image_path: "lib/MyBookshelfIcon.png"
   web:
     generate: true
-    image_path: "lib/MyBookshelfIcon.png"
+
   windows:
     generate: true
-    image_path: "lib/MyBookshelfIcon.png"
+
     icon_size: 256 # min:48, max:256, default: 48
+  android:
+    generate: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -23,9 +23,7 @@ class BooksDetails extends StatelessWidget {
                 onPressed: () async {
                   Navigator.pop(context);
 
-                  await supabase
-                      .from('countries')
-                      .delete()
+                  await supabase.from('books').delete()
                       .eq('id', book['id']);
                 },
                 icon: const Icon(Icons.delete_rounded))
