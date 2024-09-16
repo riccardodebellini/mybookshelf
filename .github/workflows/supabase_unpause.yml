@@ -1,0 +1,16 @@
+# .github/workflows/supabase-activity-scheduler.yml
+
+name: Supabase Activity Scheduler
+
+on:
+  schedule:
+    - cron: "0 0 * * 0,3" # Runs every Sunday and Wednesday
+  workflow_dispatch:
+
+jobs:
+  send-http-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send HTTP Request
+        run: curl https://wmztgdkplkomzdwileqx.supabase.co/api/etc/supabase-activity-scheduler
