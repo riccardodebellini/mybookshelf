@@ -1,20 +1,18 @@
+import 'dart:io';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mybookshelf/sys/firebase_options.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mybookshelf/pages/navigation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-Color appColor = Colors.teal;
+Color appColor = Colors.grey;
 Brightness appBrightness = Brightness.light;
 
 // RUN APP AND WAIT FOR FIREBASE
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await Supabase.initialize(
     url: 'https://wmztgdkplkomzdwileqx.supabase.co',
     anonKey:
@@ -28,10 +26,11 @@ void main() async {
     systemNavigationBarColor: Colors.transparent,
     systemStatusBarContrastEnforced: false,
   ));
-
-  doWhenWindowReady(() {
-    appWindow.minSize = Size(400, 400);
-  });
+  if (!kIsWeb && Platform.isWindows) {
+    doWhenWindowReady(() {
+      appWindow.minSize = const Size(400, 400);
+    });
+  }
   runApp(const MyApp());
 }
 
@@ -46,7 +45,16 @@ class MyApp extends StatelessWidget {
 
       // Theming
       theme: ThemeData(
+        fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
+        textTheme:
+            const TextTheme(titleLarge: TextStyle(fontWeight: FontWeight.bold)),
         useMaterial3: true,
+        filledButtonTheme: FilledButtonThemeData(
+            style: ButtonStyle(
+                textStyle: WidgetStatePropertyAll(TextStyle(
+          fontWeight: FontWeight.bold,
+          fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
+        )))),
         colorScheme: ColorScheme.fromSeed(
           seedColor: appColor,
           brightness: MediaQuery.of(context).platformBrightness,

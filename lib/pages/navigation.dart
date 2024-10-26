@@ -1,7 +1,11 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-import '../res/windowbuttons.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mybookshelf/pages/playground/playground.page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../sys/auth_system.dart';
 import '../sys/material_main_navigation.dart';
 import 'books/books.dart';
@@ -13,8 +17,33 @@ import 'lends/subpages/create.dart';
 import 'subpages/account/login.dart';
 import 'subpages/settings/settings.dart';
 
-class Navigation extends StatelessWidget {
+final supabase = Supabase.instance.client;
+
+class Navigation extends StatefulWidget {
   const Navigation({super.key});
+
+  @override
+  State<Navigation> createState() => _NavigationState();
+}
+
+class _NavigationState extends State<Navigation> {
+  @override
+  void initState() {
+    super.initState();
+
+    supabase.auth.onAuthStateChange.listen((event) async {
+      if (event.event == AuthChangeEvent.signedIn &&
+          !kIsWeb &&
+          Platform.isAndroid) {
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.requestNotificationsPermission();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +84,6 @@ class Navigation extends StatelessWidget {
                     navigateToAddBook(context);
                   }),
               appBarActions: [
-                Expanded(child: MoveWindow(),),
                 IconButton(
                     onPressed: () {
                       booksPageKey.currentState?.reloadAll();
@@ -82,10 +110,13 @@ class Navigation extends StatelessWidget {
                     },
                     icon: const Icon(Icons.cloud_sync_rounded))
               ]),
+          const MainNavigationDest(
+              appBarTitle: Text("Playground"),
+              text: "Playground",
+              icon: Icon(Icons.bug_report_rounded),
+              destination: PlaygroundPage())
         ],
         fixedActions: [
-
-
           MenuAnchor(
             builder: (context, controller, child) {
               return IconButton(
@@ -110,7 +141,6 @@ class Navigation extends StatelessWidget {
               ),
             ],
           ),
-          ButtonsCard(),
         ],
       ),
       userNotLogged: const AccountLogInPage(),
@@ -161,10 +191,7 @@ void navigateToAddBook(BuildContext context) {
               showModalBottomSheet<void>(
                   constraints: BoxConstraints(
                     maxWidth: 600,
-                    maxHeight: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.7,
+                    maxHeight: MediaQuery.of(context).size.height * 0.7,
                   ),
                   useSafeArea: true,
                   showDragHandle: true,
@@ -172,10 +199,7 @@ void navigateToAddBook(BuildContext context) {
                   builder: (context) {
                     return Padding(
                         padding: EdgeInsets.only(
-                            bottom: MediaQuery
-                                .of(context)
-                                .viewInsets
-                                .bottom),
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
                         child: const BookSearchPage());
                   });
             },
@@ -192,19 +216,13 @@ void navigateToAddLend(context) {
       showDragHandle: true,
       constraints: BoxConstraints(
         maxWidth: 600,
-        maxHeight: MediaQuery
-            .of(context)
-            .size
-            .height * 0.7,
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
       ),
       context: context,
       builder: (context) {
         return Padding(
           padding:
-          EdgeInsets.only(bottom: MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: const CreateLendPage(),
         );
       });

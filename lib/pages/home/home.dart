@@ -1,7 +1,8 @@
-
+import 'package:flex_list/flex_list.dart';
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/pages/home/subpages/genres.dart';
 import 'package:mybookshelf/res/filters.dart';
+import 'package:mybookshelf/sys/capitalize.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -18,7 +19,6 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   String favGenre = "";
   List genres = [];
-  bool isGenresLoading = true; // Flag for loading state
   final GlobalKey<RefreshIndicatorState> isReloading =
       GlobalKey<RefreshIndicatorState>();
 
@@ -38,7 +38,6 @@ class HomePageState extends State<HomePage> {
     final data = await supabase.from("profile").select();
     final userData = data[0];
     setState(() {
-      isGenresLoading = false;
       if (userData['genres'] != null) {
         favGenre = userData['favouriteGenre'];
       } else {
@@ -49,7 +48,6 @@ class HomePageState extends State<HomePage> {
 
   reloadAll() {
     setState(() {
-      isGenresLoading = true;
       isReloading.currentState?.show();
     });
   }
@@ -65,9 +63,6 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        setState(() {
-          isGenresLoading = true;
-        });
         await fetchFavouriteGenre();
         await fetchGenres();
       },
@@ -75,91 +70,86 @@ class HomePageState extends State<HomePage> {
       child: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
-          const ListTile(
-            title: Text("Generi"),
-            subtitle: Text("Esplora i tuoi libri divisi per genere"),
+          const SizedBox(
+            height: 16,
           ),
-          SizedBox(
-            height: 200,
-            child: isGenresLoading
-                ? const Center(
-                child: CircularProgressIndicator()) // Loading indicator
-                : genres.isEmpty
-                ? ListTile(
-              title: const Text("Nessun genere trovato"),
-              leading: CircleAvatar(
-                backgroundColor:
-                Theme
-                    .of(context)
-                    .colorScheme
-                    .error,
-                foregroundColor:
-                Theme
-                    .of(context)
-                    .colorScheme
-                    .onError,
-                child: const Icon(Icons.error_rounded),
-              ),
-            )
-                : ConstrainedBox(
-              constraints:
-              const BoxConstraints.tightFor(height: 200),
-              child: CarouselView.weighted(
-                flexWeights: const [2, 1],
-                shrinkExtent: 100,
-                onTap: (index) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                        return GenresPage(
-                            genre: genres[index]
-                                .toString()
-                                .toLowerCase());
-                      }));
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(
-                      color:
-                      Theme
-                          .of(context)
-                          .colorScheme
-                          .outline),
-                ),
-                children:
-                List<Widget>.generate(genres.length, (index) {
-                  return Center(
-                    child: Text(
-                        genres[index].toString().toUpperCase()),
-                  );
-                }),
-              ),
+          Center(
+            child: Text(
+              "Benvenuto in My.Bookshelf",
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
-          const Divider(),
+          const SizedBox(
+            height: 16,
+          ),
+          SearchBar(
+            elevation: WidgetStateProperty.all(0),
+            hintText: "Cerca tra i tuoi libri",
+            leading: const Icon(Icons.search_rounded),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
           const ListTile(
+            leading: Icon(Icons.interests_rounded),
+            title: Text(
+              "Generi",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          genres.isEmpty
+              ? const ListTile(
+                  title: Text("Nessun genere trovato"),
+                  leading: CircleAvatar(
+                    child: Icon(Icons.info_outline_rounded),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: FlexList(
+                    verticalSpacing: 8,
+                    horizontalSpacing: 8,
+                    children: List<Widget>.generate(genres.length, (index) {
+                      return ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 150),
+                        child: Card.filled(
+                          clipBehavior: Clip.hardEdge,
+                          child: ListTile(
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return GenresPage(
+                                    genre:
+                                        genres[index].toString().toLowerCase());
+                              }));
+                            },
+                            title: Text(genres[index]
+                                .toString()
+                                .toLowerCase()
+                                .capitalize()),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+          const ListTile(
+            leading: Icon(Icons.auto_awesome_rounded),
             title: Text("Suggeriti"),
-            subtitle: Text(
-                "Ottieni suggerimenti di lettura basati sulle tue preferenze"),
           ),
           FilteredView(
             filter: supabase
                 .from('books')
                 .select()
-                .contains('genres', '{"$favGenre"}'),
+                .contains('genres', [favGenre.toLowerCase()]),
           ),
-          const Divider(),
           const ListTile(
             title: Text("Prestiti in scadenza"),
-            subtitle: Text("Tieni d'occhio i libri prossimi alla scadenza"),
+            leading: Icon(Icons.notifications_active_rounded),
           ),
-          const ListTile(
-            leading: CircleAvatar(
-              child: Icon(
-                Icons.do_not_disturb_alt_rounded,
-              ),
-            ),
-            title: Text("Questa sezione non è ancora disponibile, "),
-          )
+          FilteredView(
+            filter: supabase.from('lends').select(),
+          ),
         ],
       ),
     );

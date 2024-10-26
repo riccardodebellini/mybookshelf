@@ -46,6 +46,11 @@ class LendsPageState extends State<LendsPage> {
           await loadBooks();
         },
         key: isReloading,
-        child: ListView(children: [FilteredView(filter: lends!)]));
+        child: ListView(children: [
+          FilteredView(
+            filter: lends!,
+            isLend: true,
+          )
+        ]));
   }
 }

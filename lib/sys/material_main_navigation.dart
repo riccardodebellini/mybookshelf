@@ -115,7 +115,15 @@ class _MainNavigationState extends State<MainNavigation> {
                       label: Text(widget.pageData[index].text));
                 }),
               ),
-              Expanded(child: widget.pageData[_currentIndex].destination),
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: widget.pageData[_currentIndex].destination,
+                )),
+              )),
             ]))
         : Scaffold(
             appBar: AppBar(
