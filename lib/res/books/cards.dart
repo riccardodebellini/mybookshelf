@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/pages/lends/subpages/details.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 
 import '../../pages/books/subpages/details.dart';
 
@@ -14,11 +15,25 @@ class BooksCards extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
+        overflow: TextOverflow.ellipsis,
         book['title'].toString().toUpperCase(),
       ),
       subtitle: Text(
-        '${book['author'] ?? book['location']} - ${book['rating']?.round() ?? book['due']}',
+        '${book['due']?.toString().toDateTime().toReadable() ?? (book['read'] ? book['rating'].round().toString() : "Non letto")} - ${book['author'] ?? book['location']}',
+        overflow: TextOverflow.ellipsis,
       ),
+      trailing: (book['due']
+                      ?.toString()
+                      .toDateTime()
+                      .difference(DateTime.now())
+                      .inDays ??
+                  4) <
+              3
+          ? const Icon(
+              Icons.error_rounded,
+              color: Colors.yellow,
+            )
+          : null,
       onTap: () {
         book['due'] != null
             ? Navigator.push(

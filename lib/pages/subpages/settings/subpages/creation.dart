@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/res/bottomsheet.util.dart';
 import 'package:mybookshelf/res/columnBuilder.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -134,52 +135,37 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                       icon: const Icon(Icons.add_rounded),
                       label: const Text("Aggiungi"),
                       onPressed: () {
-                        showModalBottomSheet<void>(
-                            showDragHandle: true,
-                            context: context,
-                            constraints: BoxConstraints(
-                              maxWidth: 600,
-                              maxHeight:
-                                  MediaQuery.of(context).size.height * 0.7,
-                            ),
-                            builder: (context) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: ListView(
-                                  children: [
-                                    const ListTile(
-                                      title:
-                                          Text("Aggiungi una nuova posizione"),
-                                    ),
-                                    ListTile(
-                                      title: TextField(
-                                        decoration: const InputDecoration(
-                                          labelText: 'Posizione',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        controller: textFieldController,
-                                      ),
-                                    ),
-                                    ListTile(
-                                      title: FilledButton.icon(
-                                        label: const Text("Salva"),
-                                        icon: const Icon(Icons.check_rounded),
-                                        onPressed: () {
-                                          locations
-                                              .add(textFieldController.text);
-                                          editedLocations();
-                                          Navigator.pop(context);
-                                          textFieldController.clear();
-                                        },
-                                      ),
-                                    )
-                                  ],
+                        showAdaptiveSheet(
+                          context,
+                          child: ListView(
+                            children: [
+                              const ListTile(
+                                title: Text("Aggiungi una nuova posizione"),
+                              ),
+                              ListTile(
+                                title: TextField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Posizione',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  controller: textFieldController,
                                 ),
-                              );
-                            });
+                              ),
+                              ListTile(
+                                title: FilledButton.icon(
+                                  label: const Text("Salva"),
+                                  icon: const Icon(Icons.check_rounded),
+                                  onPressed: () {
+                                    locations.add(textFieldController.text);
+                                    editedLocations();
+                                    Navigator.pop(context);
+                                    textFieldController.clear();
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        );
                       },
                     ),
                   )
@@ -239,50 +225,37 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
                       icon: const Icon(Icons.add_rounded),
                       label: const Text("Aggiungi"),
                       onPressed: () {
-                        showModalBottomSheet<void>(
-                            constraints: BoxConstraints(
-                              maxWidth: 600,
-                              maxHeight:
-                                  MediaQuery.of(context).size.height * 0.7,
-                            ),
-                            showDragHandle: true,
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: ListView(
-                                  children: [
-                                    const ListTile(
-                                      title: Text("Aggiungi un nuovo genere"),
-                                    ),
-                                    ListTile(
-                                      title: TextField(
-                                        decoration: const InputDecoration(
-                                          labelText: 'Genere',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        controller: textFieldController,
-                                      ),
-                                    ),
-                                    ListTile(
-                                      title: FilledButton.icon(
-                                        label: const Text("Salva"),
-                                        icon: const Icon(Icons.check_rounded),
-                                        onPressed: () {
-                                          genres.add(textFieldController.text);
-                                          editedGenres();
-                                          Navigator.pop(context);
-                                          textFieldController.clear();
-                                        },
-                                      ),
-                                    )
-                                  ],
+                        showAdaptiveSheet(
+                          context,
+                          child: ListView(
+                            children: [
+                              const ListTile(
+                                title: Text("Aggiungi un nuovo genere"),
+                              ),
+                              ListTile(
+                                title: TextField(
+                                  decoration: const InputDecoration(
+                                    labelText: 'Genere',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  controller: textFieldController,
                                 ),
-                              );
-                            });
+                              ),
+                              ListTile(
+                                title: FilledButton.icon(
+                                  label: const Text("Salva"),
+                                  icon: const Icon(Icons.check_rounded),
+                                  onPressed: () {
+                                    genres.add(textFieldController.text);
+                                    editedGenres();
+                                    Navigator.pop(context);
+                                    textFieldController.clear();
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        );
                       },
                     ),
                   )

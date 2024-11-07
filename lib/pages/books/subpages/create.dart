@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/res/bottomsheet.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'search.dart';
@@ -194,54 +195,41 @@ class _CreateBookPageState extends State<CreateBookPage> {
                 child: IconButton(
                     icon: const Icon(Icons.add_rounded),
                     onPressed: () {
-                      showModalBottomSheet<void>(
-                        showDragHandle: true,
-                        context: context,
-                        constraints: BoxConstraints(
-                          maxWidth: 600,
-                          maxHeight: MediaQuery.of(context).size.height * 0.7,
-                        ),
-                        builder: (context) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
-                            child: ListView(
-                              children: [
-                                const ListTile(
-                                  title: Text("Altro genere"),
-                                ),
-                                ListTile(
-                                  title: TextField(
-                                    decoration: const InputDecoration(
-                                      labelText: 'Genere',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    controller: textFieldController,
-                                  ),
-                                ),
-                                ListTile(
-                                  title: FilledButton.icon(
-                                    label: const Text("Salva"),
-                                    icon: const Icon(Icons.check_rounded),
-                                    onPressed: () async {
-                                      setState(() {
-                                        genres.add(textFieldController.text);
-                                      });
-                                      supabase
-                                          .from('profile')
-                                          .update({'genres': genres}).eq(
-                                              'user_id',
-                                              supabase.auth.currentUser!.id);
-                                      Navigator.pop(context);
-                                      textFieldController.clear();
-                                    },
-                                  ),
-                                )
-                              ],
+                      showAdaptiveSheet(
+                        context,
+                        child: ListView(
+                          children: [
+                            const ListTile(
+                              title: Text("Altro genere"),
                             ),
-                          );
-                        },
+                            ListTile(
+                              title: TextField(
+                                decoration: const InputDecoration(
+                                  labelText: 'Genere',
+                                  border: OutlineInputBorder(),
+                                ),
+                                controller: textFieldController,
+                              ),
+                            ),
+                            ListTile(
+                              title: FilledButton.icon(
+                                label: const Text("Salva"),
+                                icon: const Icon(Icons.check_rounded),
+                                onPressed: () async {
+                                  setState(() {
+                                    genres.add(textFieldController.text);
+                                  });
+                                  supabase
+                                      .from('profile')
+                                      .update({'genres': genres}).eq('user_id',
+                                          supabase.auth.currentUser!.id);
+                                  Navigator.pop(context);
+                                  textFieldController.clear();
+                                },
+                              ),
+                            )
+                          ],
+                        ),
                       );
                     }))),
         SwitchListTile(

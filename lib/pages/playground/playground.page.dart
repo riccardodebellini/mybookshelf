@@ -1,9 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../res/bottomsheet.util.dart';
 import '../../sys/notifications.dart';
 
 final supabase = Supabase.instance.client;
@@ -22,26 +26,31 @@ class PlaygroundPage extends StatelessWidget {
             onPressed: () async {
               NotificationService.showNotificationWithActions();
             },
-            child: const Text("Test #2: Push Notif with actions"))
+            child: const Text("Test #2: Push Notif with actions")),
+        FilledButton(
+            onPressed: () {
+              showAdaptiveSheet(context, child: Text("Test"));
+            },
+            child: Text("Test #3 - Adaptive bottom sheet"))
       ],
     );
   }
 }
 
 void sendNotificationForExpiredLend() async {
-  print("object");
-  final books = await supabase.from('lends').select() as List;
+  final books = await supabase
+      .from('lends')
+      .select()
+      .lte('due', DateTime.now().add(const Duration(days: 3)).toShortString())
+      .order('due', ascending: true);
   print(books.toString());
-  for (var i = 0; i < books.length; i++) {
-    final bookdata = books[i];
+  for (var index = 0; index < books.length; index++) {
+    final bookdata = books[index];
     final title = bookdata['title'];
-    print(title);
+    print("Libro #" + index.toString() + ": " + title);
     try {
-      final unpDue = bookdata['due'];
-      final due = DateTime.tryParse(unpDue) ?? DateTime.timestamp();
-      print(
-          "year: ${due.year.toString()}, month: ${due.month.toString()}, day: ${due.day.toString()}");
-      final time = due.difference(DateTime.timestamp()).inDays;
+      final due = bookdata['due'].toString().toDateTime();
+      final time = due.difference(DateTime.now()).inDays;
       if (time < 4 && time >= 0) {
         print("expiring");
         if (!kIsWeb && Platform.isAndroid) {
@@ -55,62 +64,24 @@ void sendNotificationForExpiredLend() async {
         if (!kIsWeb && Platform.isAndroid) {
           NotificationService.showLendNotification(
               "⚠️ Hai un libro scaduto",
-              "Il libro $title è scaduto da ${((time + 1) * (-1)).toString()} giorni",
+              "Il libro $title è scaduto da ${(-(time + 1)).toString()} giorni",
               bookdata['id'],
               bookdata['id']);
         }
-      } else {
-        print("ok");
       }
-    } catch (e) {}
+    } catch (e) {
+      print("error: " + e.toString());
+    }
   }
 }
-/*
-class PlaygroundPage extends StatefulWidget {
-  const PlaygroundPage({super.key});
 
-  @override
-  State<PlaygroundPage> createState() => _PlaygroundPageState();
-}
-
-class _PlaygroundPageState extends State<PlaygroundPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                NotificationService.init();
-              },
-              child: const Text('Init Notification'),
-            ),
-            const SizedBox(height: 12),ElevatedButton(
-              onPressed: () {
-                NotificationService.showInstantNotification(
-                    "Instant Notification", "This shows an instant notifications");
-              },
-              child: const Text('Show Notification'),
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () {
-                DateTime scheduledDate = DateTime.now().add( const Duration(seconds: 5));
-                NotificationService.scheduleNotification(
-                  0,
-                  "Scheduled Notification",
-                  "This notification is scheduled to appear after 5 seconds",
-                  scheduledDate,
-                );
-              },
-              child: const Text('Schedule Notification'),
-            ),
-          ],
-        ),
-      ),
+@pragma('vm:entry-point')
+void myCallback(int id) {
+  print("helloworld");
+  if (!kIsWeb && Platform.isAndroid) {
+    NotificationService.showNotification(
+      "Test Notif",
+      "...",
     );
   }
 }
-*/

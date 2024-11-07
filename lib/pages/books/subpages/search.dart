@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mybookshelf/res/bottomsheet.util.dart';
 
 import 'create.dart';
 
@@ -40,22 +41,10 @@ class BookListTile extends StatelessWidget {
       subtitle: Text('${book.year} - ${book.author}'),
       onTap: () {
         Navigator.pop(context);
-        showModalBottomSheet<void>(
-            showDragHandle: true,
-            context: context,
-            constraints: BoxConstraints(
-              maxWidth: 600,
-              maxHeight: MediaQuery.of(context).size.height * 0.7,
-            ),
-            builder: (context) {
-              return Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: CreateBookPage(
-                  data: book,
-                ),
-              );
-            });
+        showAdaptiveSheet(context,
+            child: CreateBookPage(
+              data: book,
+            ));
       },
     );
   }

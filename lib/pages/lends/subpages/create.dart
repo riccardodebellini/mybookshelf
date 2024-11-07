@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -15,7 +16,7 @@ class CreateLendPage extends StatefulWidget {
 class _CreateLendPageState extends State<CreateLendPage> {
   final titleController = TextEditingController();
   final locationController = TextEditingController();
-  final dueController = DateTime.now();
+  late var dueController = DateTime.now().add(const Duration(days: 30));
 
   String? titleError;
   String? locationError;
@@ -85,7 +86,28 @@ class _CreateLendPageState extends State<CreateLendPage> {
           ),
         ),
         ListTile(
-          title: Text(dueController.toString()),
+          title: const Text("Scadenza"),
+          subtitle: Text(dueController.toReadable()),
+          trailing: FilledButton(
+              onPressed: () {
+                showDatePicker(
+                        // cancelText: "Annulla",
+                        currentDate: DateTime.now(),
+                        initialDate: dueController,
+                        locale: const Locale('it'),
+                        context: context,
+                        firstDate:
+                            DateTime.now().add(const Duration(days: -30)),
+                        lastDate: DateTime.now().add(const Duration(days: 365)))
+                    .then((value) {
+                  value != null
+                      ? setState(() {
+                          dueController = value;
+                        })
+                      : null;
+                });
+              },
+              child: const Text("Cambia")),
         ),
         ListTile(
           title: FilledButton.icon(
@@ -118,7 +140,8 @@ class _CreateLendPageState extends State<CreateLendPage> {
         await supabase.from('lends').insert({
           'title': title,
           'location': location,
-          'user_id': supabase.auth.currentUser!.id
+          'user_id': supabase.auth.currentUser!.id,
+          'due': dueController.toShortString()
         });
 
         titleController.clear();

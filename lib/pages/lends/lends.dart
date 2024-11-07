@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mybookshelf/res/filters.dart';
+import 'package:mybookshelf/res/itemlist.res.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -14,41 +14,26 @@ class LendsPage extends StatefulWidget {
 }
 
 class LendsPageState extends State<LendsPage> {
-  PostgrestFilterBuilder<List<Map<String, dynamic>>>? lends;
-
-  loadBooks() async {
-    final lendList = supabase.from('lends').select();
-
-    setState(() {
-      lends = lendList as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
-    });
-  }
 
   final GlobalKey<RefreshIndicatorState> isReloading =
       GlobalKey<RefreshIndicatorState>();
 
-  reloadAll() {
+  reload() {
     setState(() {
       isReloading.currentState?.show();
     });
   }
 
   @override
-  void initState() {
-    super.initState();
-    loadBooks();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
         onRefresh: () async {
-          await loadBooks();
         },
         key: isReloading,
         child: ListView(children: [
-          FilteredView(
-            filter: lends!,
+          ItemsList(
+            filter:
+                supabase.from('lends').select().order('due', ascending: true),
             isLend: true,
           )
         ]));

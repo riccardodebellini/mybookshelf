@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -44,7 +45,7 @@ class LendDetails extends StatelessWidget {
             ),
             ListTile(
               title: const Text("Scadenza"),
-              subtitle: Text(book['due'].toString()),
+              subtitle: Text(book['due'].toString().toDateTime().toReadable()),
               leading: const Icon(Icons.notification_important_rounded),
             ),
           ],

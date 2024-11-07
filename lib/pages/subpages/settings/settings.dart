@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mybookshelf/main.dart';
 import 'package:mybookshelf/pages/subpages/settings/subpages/account.dart';
 import 'package:mybookshelf/pages/subpages/settings/subpages/creation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -69,7 +71,36 @@ class SettingsPage extends StatelessWidget {
                           builder: (context) => const SettingsCreationPage()));
                 },
               ),
-
+              ListTile(
+                title: const Text("Info"),
+                subtitle: const Text("Licenze e versione"),
+                leading: const Icon(Icons.info_outline_rounded),
+                onTap: () {
+                  showAboutDialog(
+                      context: context,
+                      applicationName: "My.Bookshelf",
+                      applicationVersion: (isTestVersion
+                          ? "Versione di test ($appVersion-test)"
+                          : appVersion),
+                      applicationIcon: const CircleAvatar(child: Text("My")),
+                      applicationLegalese:
+                          "(c) Riccardo Debellini - 2024\nLicense at github.com/riccardodebellini/mybookshelf");
+                },
+              ),
+              ListTile(
+                title: const Text("Condividi"),
+                subtitle: const Text("Condividi il link a My.Bookshelf"),
+                leading: const Icon(Icons.share_rounded),
+                onTap: () {
+                  Clipboard.setData(const ClipboardData(
+                      text:
+                          "https://riccardodebellini.github.io/mybookshelf/"));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("Link copiato negli appunti"),
+                    behavior: SnackBarBehavior.floating,
+                  ));
+                },
+              ),
               /*ListTile(
                 title: const Text("Condivisione"),
                 subtitle: const Text("Riempimento automatico campi"),

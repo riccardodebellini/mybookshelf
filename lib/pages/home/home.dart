@@ -1,8 +1,9 @@
 import 'package:flex_list/flex_list.dart';
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/pages/home/subpages/genres.dart';
-import 'package:mybookshelf/res/filters.dart';
-import 'package:mybookshelf/sys/capitalize.util.dart';
+import 'package:mybookshelf/pages/home/subpages/searchresults.page.dart';
+import 'package:mybookshelf/res/itemlist.res.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -22,6 +23,7 @@ class HomePageState extends State<HomePage> {
   final GlobalKey<RefreshIndicatorState> isReloading =
       GlobalKey<RefreshIndicatorState>();
 
+  TextEditingController query = TextEditingController();
   fetchGenres() async {
     final data = await supabase.from("profile").select();
     final userData = data[0];
@@ -46,7 +48,7 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  reloadAll() {
+  reload() {
     setState(() {
       isReloading.currentState?.show();
     });
@@ -82,10 +84,27 @@ class HomePageState extends State<HomePage> {
           const SizedBox(
             height: 16,
           ),
-          SearchBar(
-            elevation: WidgetStateProperty.all(0),
-            hintText: "Cerca tra i tuoi libri",
-            leading: const Icon(Icons.search_rounded),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width / 8),
+            child: SearchBar(
+              textInputAction: TextInputAction.search,
+              padding: const WidgetStatePropertyAll(
+                  EdgeInsets.symmetric(horizontal: 16)),
+              elevation: WidgetStateProperty.all(0),
+              hintText: "Cerca tra i tuoi libri",
+              leading: const Icon(Icons.search_rounded),
+              onSubmitted: (value) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchResultsPage(
+                              input: value,
+                            )));
+                query.clear();
+              },
+              controller: query,
+            ),
           ),
           const SizedBox(
             height: 16,
@@ -135,20 +154,37 @@ class HomePageState extends State<HomePage> {
                 ),
           const ListTile(
             leading: Icon(Icons.auto_awesome_rounded),
-            title: Text("Suggeriti"),
+            title: Text(
+              "Suggeriti",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          FilteredView(
+          ItemsList(
             filter: supabase
                 .from('books')
                 .select()
-                .contains('genres', [favGenre.toLowerCase()]),
+                .contains('genres', [favGenre.toLowerCase()])
+                .eq('read', false)
+                .limit(3),
+            reloadPlaceholders: 3,
           ),
           const ListTile(
-            title: Text("Prestiti in scadenza"),
+            title: Text(
+              "Prestiti in scadenza",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             leading: Icon(Icons.notifications_active_rounded),
           ),
-          FilteredView(
-            filter: supabase.from('lends').select(),
+          ItemsList(
+            filter: supabase
+                .from('lends')
+                .select()
+                .lte('due',
+                    DateTime.now().add(const Duration(days: 3)).toShortString())
+                .order('due', ascending: true)
+                .limit(3),
+            isLend: true,
+            reloadPlaceholders: 3,
           ),
         ],
       ),

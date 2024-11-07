@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../res/filters.dart';
+import '../../res/itemlist.res.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -17,43 +17,19 @@ class BooksPage extends StatefulWidget {
 class BooksPageState extends State<BooksPage> {
   Set<dynamic> currentFilter = {2};
 
-  PostgrestFilterBuilder<List<Map<String, dynamic>>>? favBooks;
-  PostgrestFilterBuilder<List<Map<String, dynamic>>>? unreadBooks;
-  PostgrestFilterBuilder<List<Map<String, dynamic>>>? allBooks;
-
-  loadBooks() async {
-    final fav = supabase.from('books').select().gt('rating', 4);
-    final unread = supabase.from('books').select().eq('read', false);
-    final all = supabase.from('books').select();
-    setState(() {
-      favBooks = fav as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
-      unreadBooks =
-          unread as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
-      allBooks = all as PostgrestFilterBuilder<List<Map<String, dynamic>>>?;
-    });
-  }
-
   final GlobalKey<RefreshIndicatorState> isReloading =
   GlobalKey<RefreshIndicatorState>();
 
-  reloadAll() {
+  reload() {
     setState(() {
       isReloading.currentState?.show();
     });
   }
 
   @override
-  void initState() {
-    super.initState();
-    loadBooks();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
-        await loadBooks();
-      },
+      onRefresh: () async {},
       key: isReloading,
       child: ListView(
         children: [
@@ -89,10 +65,12 @@ class BooksPageState extends State<BooksPage> {
             height: 8,
           ),
           currentFilter.first == 0
-              ? FilteredView(filter: favBooks!)
+              ? ItemsList(
+                  filter: supabase.from('books').select().gt('rating', 4))
               : (currentFilter.first == 1
-                  ? FilteredView(filter: unreadBooks!)
-                  : FilteredView(filter: allBooks!))
+                  ? ItemsList(
+                      filter: supabase.from('books').select().eq('read', false))
+                  : ItemsList(filter: supabase.from('books').select()))
         ],
       ),
     );

@@ -66,10 +66,12 @@ class BooksDetails extends StatelessWidget {
             ),
             ListTile(
               title: const Text("Genere"),
-              subtitle: Text(book['genres']
-                  .toString()
+              subtitle: Text(book['genres'].toString().length > 2
+                  ? book['genres']
+                      .toString()
                   .replaceAll("[", "")
-                  .replaceAll("]", "")),
+                      .replaceAll("]", "")
+                  : "--"),
               leading: const Icon(
                 Icons.category_rounded,
               ),

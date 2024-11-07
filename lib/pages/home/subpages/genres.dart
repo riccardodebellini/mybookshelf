@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mybookshelf/res/filters.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../../res/itemlist.res.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -25,7 +26,7 @@ class _GenresPageState extends State<GenresPage> {
           title: Text(widget.genre.toUpperCase()),
         ),
         body: SingleChildScrollView(
-          child: FilteredView(
+          child: ItemsList(
             filter: supabase
                 .from('books')
                 .select()

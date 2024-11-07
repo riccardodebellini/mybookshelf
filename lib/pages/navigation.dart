@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mybookshelf/main.dart';
 import 'package:mybookshelf/pages/playground/playground.page.dart';
+import 'package:mybookshelf/res/bottomsheet.util.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../sys/auth_system.dart';
@@ -41,6 +44,7 @@ class _NavigationState extends State<Navigation> {
             .resolvePlatformSpecificImplementation<
                 AndroidFlutterLocalNotificationsPlugin>()
             ?.requestNotificationsPermission();
+        await Permission.scheduleExactAlarm.request();
       }
     });
   }
@@ -53,8 +57,8 @@ class _NavigationState extends State<Navigation> {
           MainNavigationDest(
               appBarTitle: const Text("Home"),
               text: 'Home',
-              icon: const Icon(Icons.interests_rounded),
-              destination: HomePage(
+                  icon: const Icon(Icons.home_rounded),
+                  destination: HomePage(
                 key: homePageKey,
               ),
               fab: MainNavigationFAB(
@@ -66,8 +70,8 @@ class _NavigationState extends State<Navigation> {
               appBarActions: [
                 IconButton(
                     onPressed: () {
-                      homePageKey.currentState?.reloadAll();
-                    },
+                          homePageKey.currentState?.reload();
+                        },
                     icon: const Icon(Icons.cloud_sync_rounded))
               ]),
           MainNavigationDest(
@@ -86,8 +90,8 @@ class _NavigationState extends State<Navigation> {
               appBarActions: [
                 IconButton(
                     onPressed: () {
-                      booksPageKey.currentState?.reloadAll();
-                    },
+                          booksPageKey.currentState?.reload();
+                        },
                     icon: const Icon(Icons.cloud_sync_rounded))
               ]),
           MainNavigationDest(
@@ -106,16 +110,20 @@ class _NavigationState extends State<Navigation> {
               appBarActions: [
                 IconButton(
                     onPressed: () {
-                      lendsPageKey.currentState?.reloadAll();
-                    },
+                          lendsPageKey.currentState?.reload();
+                        },
                     icon: const Icon(Icons.cloud_sync_rounded))
               ]),
-          const MainNavigationDest(
-              appBarTitle: Text("Playground"),
-              text: "Playground",
-              icon: Icon(Icons.bug_report_rounded),
-              destination: PlaygroundPage())
-        ],
+            ] +
+            (isTestVersion
+                ? [
+                    const MainNavigationDest(
+                        appBarTitle: Text("Playground"),
+                        text: "Playground",
+                        icon: Icon(Icons.bug_report_rounded),
+                        destination: PlaygroundPage())
+                  ]
+                : []),
         fixedActions: [
           MenuAnchor(
             builder: (context, controller, child) {
@@ -162,46 +170,14 @@ void navigateToAddBook(BuildContext context) {
             onPressed: () {
               Navigator.pop(context);
 
-              showModalBottomSheet(
-                  showDragHandle: true,
-                  constraints: BoxConstraints(
-                    maxWidth: 600,
-                    maxHeight: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.7,
-                  ),
-                  context: context,
-                  builder: (context) {
-                    return Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery
-                              .of(context)
-                              .viewInsets
-                              .bottom),
-                      child: const CreateBookPage(),
-                    );
-                  });
+              showAdaptiveSheet(context, child: CreateBookPage());
             },
             child: const Text("Crea da zero"),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(context);
-              showModalBottomSheet<void>(
-                  constraints: BoxConstraints(
-                    maxWidth: 600,
-                    maxHeight: MediaQuery.of(context).size.height * 0.7,
-                  ),
-                  useSafeArea: true,
-                  showDragHandle: true,
-                  context: context,
-                  builder: (context) {
-                    return Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: const BookSearchPage());
-                  });
+              showAdaptiveSheet(context, child: BookSearchPage());
             },
             child: const Text("Cerca su Google Books"),
           )
@@ -212,18 +188,5 @@ void navigateToAddBook(BuildContext context) {
 }
 
 void navigateToAddLend(context) {
-  showModalBottomSheet(
-      showDragHandle: true,
-      constraints: BoxConstraints(
-        maxWidth: 600,
-        maxHeight: MediaQuery.of(context).size.height * 0.7,
-      ),
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: const CreateLendPage(),
-        );
-      });
+  showAdaptiveSheet(context, child: CreateLendPage());
 }

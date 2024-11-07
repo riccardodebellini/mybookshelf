@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mybookshelf/pages/subpages/account/create.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -320,8 +319,7 @@ class _AccountLogInPageState extends State<AccountLogInPage> {
   }
 
   void createAccount() {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const AccountCreatePage()));
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountCreatePage()));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text(
           "Per questioni di T&C e Privacy Policy, è attualmente disabilitata la creazione di account"),

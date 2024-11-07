@@ -4,21 +4,27 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mybookshelf/pages/navigation.dart';
+import 'package:mybookshelf/sys/notifications.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-Color appColor = Colors.grey;
+// Quick settings
+Color appColor = Colors.blue;
 Brightness appBrightness = Brightness.light;
-
-// RUN APP AND WAIT FOR FIREBASE
+bool isTestVersion = false;
+String appVersion = "0.3";
+//Run
 void main() async {
+  //Supabase init
   await Supabase.initialize(
     url: 'https://wmztgdkplkomzdwileqx.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtenRnZGtwbGtvbXpkd2lsZXF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjMwMzEzMzMsImV4cCI6MjAzODYwNzMzM30.eWwZMt4qe7JyuUMubB9gCxDQMKnKPGuQp-k1Y1U5NpI',
   );
 
+  // Android EtE config.
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarContrastEnforced: false,
@@ -26,15 +32,23 @@ void main() async {
     systemNavigationBarColor: Colors.transparent,
     systemStatusBarContrastEnforced: false,
   ));
-  if (!kIsWeb && Platform.isWindows) {
-    doWhenWindowReady(() {
-      appWindow.minSize = const Size(400, 400);
-    });
+
+  if (!kIsWeb) {
+    // Windows window SetUp
+    if (Platform.isWindows) {
+      doWhenWindowReady(() {
+        appWindow.minSize = const Size(400, 400);
+      });
+    }
+
+    // Android nofications init
+    if (Platform.isAndroid) {
+      NotificationService.init();
+    }
   }
   runApp(const MyApp());
 }
 
-// APP
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -42,7 +56,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('it'),
+      ],
       // Theming
       theme: ThemeData(
         fontFamily: GoogleFonts.ibmPlexSans().fontFamily,

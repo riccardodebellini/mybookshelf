@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -17,15 +18,27 @@ class NotificationService {
 
     if (notificationResponse.actionId.toString() == "post") {
       try {
+        await Supabase.initialize(
+          url: 'https://wmztgdkplkomzdwileqx.supabase.co',
+          anonKey:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtenRnZGtwbGtvbXpkd2lsZXF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjMwMzEzMzMsImV4cCI6MjAzODYwNzMzM30.eWwZMt4qe7JyuUMubB9gCxDQMKnKPGuQp-k1Y1U5NpI',
+        );
+      } catch (e) {
+        print("object");
+      }
+      if (supabase.auth.currentUser?.id == null) {
+        return;
+      }
+
+      try {
         final book = await supabase
             .from('lends')
             .select()
             .eq('id', notificationResponse.payload.toString())
             .single();
-        final parsedDue = DateTime.timestamp();
+        final parsedDue = DateTime.now();
         final newParsedDue = parsedDue.add(const Duration(days: 30));
-        final stringDue =
-            "${newParsedDue.year}-${newParsedDue.month}-${newParsedDue.day}";
+        final stringDue = newParsedDue.toShortString();
         print("actual due: ${book['due']}, new due: $stringDue");
         print(book.toString());
         print(book['id'].toString());

@@ -67,13 +67,17 @@ class MainNavigation extends StatefulWidget {
   /// To use only **portrait mode _(NavBar)_**, set this to a very big value, such as [9999]
   ///
   /// Defaults to [600]
-  final int? breakpoint;
+  final int smallBreakpoint;
+
+  /// **Experimental** _do not use_
+  final int largeBreakpoint;
 
   const MainNavigation({
     super.key,
     required this.pageData,
     this.fixedActions = const [],
-    this.breakpoint = 600,
+    this.smallBreakpoint = 600,
+    this.largeBreakpoint = 1200,
   });
 
   @override
@@ -85,8 +89,37 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.of(context).size.width > widget.breakpoint!
+    return MediaQuery.of(context).size.width < widget.smallBreakpoint
         ? Scaffold(
+            appBar: AppBar(
+                title: widget.pageData[_currentIndex].appBarTitle,
+                centerTitle: widget.pageData[_currentIndex].centerTitle,
+                actions: widget.pageData[_currentIndex].appBarActions! +
+                    widget.fixedActions!),
+            floatingActionButton: widget.pageData[_currentIndex].fab != null
+                ? FloatingActionButton.extended(
+                    heroTag: null,
+                    onPressed: widget.pageData[_currentIndex].fab?.onPressed,
+                    icon: widget.pageData[_currentIndex].fab?.icon,
+                    label: Text(widget.pageData[_currentIndex].fab!.label),
+                  )
+                : null,
+            body: widget.pageData[_currentIndex].destination,
+            bottomNavigationBar: NavigationBar(
+              destinations: List.generate(widget.pageData.length, (index) {
+                return NavigationDestination(
+                    icon: widget.pageData[index].icon,
+                    label: widget.pageData[index].text);
+              }),
+              selectedIndex: _currentIndex,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
+          )
+        : Scaffold(
             appBar: AppBar(
                 title: widget.pageData[_currentIndex].appBarTitle,
                 centerTitle: widget.pageData[_currentIndex].centerTitle,
@@ -118,41 +151,19 @@ class _MainNavigationState extends State<MainNavigation> {
               Expanded(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Card(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: widget.pageData[_currentIndex].destination,
-                )),
+                child: Theme.of(context).brightness == Brightness.light
+                    ? Card.outlined(
+                        child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: widget.pageData[_currentIndex].destination,
+                      ))
+                    : Card(
+                        elevation: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: widget.pageData[_currentIndex].destination,
+                        )),
               )),
-            ]))
-        : Scaffold(
-            appBar: AppBar(
-                title: widget.pageData[_currentIndex].appBarTitle,
-                centerTitle: widget.pageData[_currentIndex].centerTitle,
-                actions: widget.pageData[_currentIndex].appBarActions! +
-                    widget.fixedActions!),
-            floatingActionButton: widget.pageData[_currentIndex].fab != null
-                ? FloatingActionButton.extended(
-                    heroTag: null,
-                    onPressed: widget.pageData[_currentIndex].fab?.onPressed,
-                    icon: widget.pageData[_currentIndex].fab?.icon,
-                    label: Text(widget.pageData[_currentIndex].fab!.label),
-                  )
-                : null,
-            body: widget.pageData[_currentIndex].destination,
-            bottomNavigationBar: NavigationBar(
-              destinations: List.generate(widget.pageData.length, (index) {
-                return NavigationDestination(
-                    icon: widget.pageData[index].icon,
-                    label: widget.pageData[index].text);
-              }),
-              selectedIndex: _currentIndex,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-            ),
-          );
+            ]));
   }
 }
