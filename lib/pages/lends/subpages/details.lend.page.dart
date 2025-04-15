@@ -5,7 +5,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 final supabase = Supabase.instance.client;
 
 class LendDetails extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final Map book;
 
   const LendDetails({
@@ -17,7 +16,7 @@ class LendDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           title: Text(book['title']),
           actions: [
             IconButton(

@@ -5,15 +5,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mybookshelf/pages/navigation.dart';
 import 'package:mybookshelf/sys/notifications.dart';
+import 'package:mybookshelf/sys/router.sys.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+
+final supabase = Supabase.instance.client;
 
 // Quick settings
 Color appColor = Colors.blue;
 Brightness appBrightness = Brightness.light;
-bool isTestVersion = false;
+bool isTestVersion = true;
 String appVersion = "0.3";
 //Run
 void main() async {
@@ -46,6 +50,13 @@ void main() async {
       NotificationService.init();
     }
   }
+
+  supabase.auth.onAuthStateChange.listen((state) {
+    MyBookshelfRouter.router.refresh();
+  });
+
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+
   runApp(const MyApp());
 }
 
@@ -54,7 +65,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -82,7 +93,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       title: "MyBookshelf",
-      home: const Navigation(), // Home page
+      routerConfig: MyBookshelfRouter.router, // Home page
     );
   }
 }

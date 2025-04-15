@@ -7,8 +7,8 @@ void showAdaptiveSheet(BuildContext context, {required Widget child}) {
     isScrollControlled: true,
     showDragHandle: true,
     elevation: 0,
-    constraints: BoxConstraints(maxWidth: 600, minWidth: 600),
-    builder: (context) => Container(
+    constraints: const BoxConstraints(maxWidth: 600, minWidth: 600),
+    builder: (context) => SizedBox(
         height: MediaQuery.of(context).size.height * (!kIsWeb ? 0.75 : 0.5),
         child: Padding(
           padding: EdgeInsets.only(

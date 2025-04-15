@@ -1,7 +1,6 @@
 import 'package:flex_list/flex_list.dart';
 import 'package:flutter/material.dart';
-import 'package:mybookshelf/pages/home/subpages/genres.dart';
-import 'package:mybookshelf/pages/home/subpages/searchresults.page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mybookshelf/res/itemlist.res.dart';
 import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -95,12 +94,7 @@ class HomePageState extends State<HomePage> {
               hintText: "Cerca tra i tuoi libri",
               leading: const Icon(Icons.search_rounded),
               onSubmitted: (value) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchResultsPage(
-                              input: value,
-                            )));
+                context.push('/search?q=$value');
                 query.clear();
               },
               controller: query,
@@ -135,12 +129,16 @@ class HomePageState extends State<HomePage> {
                           clipBehavior: Clip.hardEdge,
                           child: ListTile(
                             onTap: () {
-                              Navigator.push(context,
+                              final genre =
+                                  genres[index].toString().toLowerCase();
+                              context.push('/books/genres/$genre');
+                              /* Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return GenresPage(
                                     genre:
                                         genres[index].toString().toLowerCase());
                               }));
+                            },*/
                             },
                             title: Text(genres[index]
                                 .toString()

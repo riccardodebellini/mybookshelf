@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mybookshelf/main.dart';
-import 'package:mybookshelf/pages/subpages/settings/subpages/account.dart';
-import 'package:mybookshelf/pages/subpages/settings/subpages/creation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,8 +14,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: context.canPop() ? null : IconButton(onPressed: () {context.go('/');}, icon: const Icon(Icons.home_rounded)),
         title: const Text("Impostazioni"),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: Column(children: [
         Expanded(
@@ -54,10 +54,8 @@ class SettingsPage extends StatelessWidget {
                 subtitle: const Text("Nome, password..."),
                 leading: const Icon(Icons.key_rounded),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SettingsAccountPage()));
+                  context.push('/settings/account');
+
                 },
               ),
               ListTile(
@@ -65,10 +63,7 @@ class SettingsPage extends StatelessWidget {
                 subtitle: const Text("Riempimento automatico campi"),
                 leading: const Icon(Icons.bookmark_add_rounded),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SettingsCreationPage()));
+                  context.push('/settings/creation');
                 },
               ),
               ListTile(

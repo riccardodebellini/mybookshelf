@@ -32,12 +32,13 @@ extension DateTimeExtensions on DateTime {
 extension IntExtensions on int {
   String toChars(int n) {
     if (this < (10 ^ (n - 1)) && this > -1) {
-      var string = this.toString();
+      var string = toString();
       while (string.length != n) {
-        string = "0" + string;
+        string = "0$string";
       }
       return string;
-    } else
-      return this.toString();
+    } else {
+      return toString();
+    }
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mybookshelf/pages/lends/subpages/details.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mybookshelf/sys/extensions.util.dart';
 
-import '../../pages/books/subpages/details.dart';
 
 class BooksCards extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -36,20 +35,8 @@ class BooksCards extends StatelessWidget {
           : null,
       onTap: () {
         book['due'] != null
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => LendDetails(
-                          book: book,
-                        )),
-              )
-            : Navigator.push(
-                context,
-          MaterialPageRoute(
-              builder: (context) => BooksDetails(
-                          book: book,
-                        )),
-              );
+            ? context.push('/lends/details/${book['id']}', extra: book)
+            : context.push('/books/details/${book['id']}', extra: book);
       },
     );
   }

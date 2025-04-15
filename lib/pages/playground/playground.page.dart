@@ -29,9 +29,9 @@ class PlaygroundPage extends StatelessWidget {
             child: const Text("Test #2: Push Notif with actions")),
         FilledButton(
             onPressed: () {
-              showAdaptiveSheet(context, child: Text("Test"));
+              showAdaptiveSheet(context, child: const Text("Test"));
             },
-            child: Text("Test #3 - Adaptive bottom sheet"))
+            child: const Text("Test #3 - Adaptive bottom sheet"))
       ],
     );
   }
@@ -47,7 +47,7 @@ void sendNotificationForExpiredLend() async {
   for (var index = 0; index < books.length; index++) {
     final bookdata = books[index];
     final title = bookdata['title'];
-    print("Libro #" + index.toString() + ": " + title);
+    print("Libro #$index: " + title);
     try {
       final due = bookdata['due'].toString().toDateTime();
       final time = due.difference(DateTime.now()).inDays;
@@ -70,7 +70,7 @@ void sendNotificationForExpiredLend() async {
         }
       }
     } catch (e) {
-      print("error: " + e.toString());
+      print("error: $e");
     }
   }
 }

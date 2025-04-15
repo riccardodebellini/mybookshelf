@@ -20,7 +20,7 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Account"),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
         child: Column(

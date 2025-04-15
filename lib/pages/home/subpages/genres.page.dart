@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mybookshelf/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../res/itemlist.res.dart';
@@ -22,8 +24,8 @@ class _GenresPageState extends State<GenresPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.genre.toUpperCase()),
+          title: Text(widget.genre.capitalize()),
+          leading: context.canPop() ? null : IconButton(onPressed: () {context.go('/');}, icon: const Icon(Icons.home_rounded)),
         ),
         body: SingleChildScrollView(
           child: ItemsList(

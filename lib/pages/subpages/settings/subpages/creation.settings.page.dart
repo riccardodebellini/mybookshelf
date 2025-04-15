@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mybookshelf/res/bottomsheet.util.dart';
-import 'package:mybookshelf/res/columnBuilder.dart';
+import 'package:mybookshelf/res/columnbuilder.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -91,7 +91,7 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Creazione"),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: ListView(
         children: [
