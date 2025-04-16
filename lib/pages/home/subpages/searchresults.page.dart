@@ -55,7 +55,13 @@ class SearchResultsPageState extends State<SearchResultsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Ricerca"),
-        leading: context.canPop() ? null : IconButton(onPressed: () {context.go('/');}, icon: const Icon(Icons.home_rounded)),
+        leading: context.canPop()
+            ? null
+            : IconButton(
+                onPressed: () {
+                  context.go('/');
+                },
+                icon: const Icon(Icons.home_rounded)),
       ),
       body: ListView(
         children: [

@@ -252,6 +252,5 @@ class _SettingsAccountPageState extends State<SettingsAccountPage> {
       },
     );
   }
-
 }
 // Center(child: Text(user.email!))

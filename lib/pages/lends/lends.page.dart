@@ -14,7 +14,6 @@ class LendsPage extends StatefulWidget {
 }
 
 class LendsPageState extends State<LendsPage> {
-
   final GlobalKey<RefreshIndicatorState> isReloading =
       GlobalKey<RefreshIndicatorState>();
 
@@ -27,8 +26,7 @@ class LendsPageState extends State<LendsPage> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: () async {
-        },
+        onRefresh: () async {},
         key: isReloading,
         child: ListView(children: [
           ItemsList(

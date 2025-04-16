@@ -89,8 +89,10 @@ class _ItemsListState extends State<ItemsList> {
                     return DataRow(
                       onSelectChanged: (_) {
                         due != null
-                            ? context.push('/lends/details/${book['id']}', extra: book)
-                            : context.push('/books/details/${book['id']}', extra: book);
+                            ? context.push('/lends/details/${book['id']}',
+                                extra: book)
+                            : context.push('/books/details/${book['id']}',
+                                extra: book);
                       },
                       cells: <DataCell>[
                         DataCell(

@@ -18,7 +18,7 @@ class BooksPageState extends State<BooksPage> {
   Set<dynamic> currentFilter = {2};
 
   final GlobalKey<RefreshIndicatorState> isReloading =
-  GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>();
 
   reload() {
     setState(() {

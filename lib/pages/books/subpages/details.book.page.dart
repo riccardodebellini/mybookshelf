@@ -23,8 +23,7 @@ class BooksDetails extends StatelessWidget {
                 onPressed: () async {
                   Navigator.pop(context);
 
-                  await supabase.from('books').delete()
-                      .eq('id', book['id']);
+                  await supabase.from('books').delete().eq('id', book['id']);
                 },
                 icon: const Icon(Icons.delete_rounded))
           ],
@@ -69,7 +68,7 @@ class BooksDetails extends StatelessWidget {
               subtitle: Text(book['genres'].toString().length > 2
                   ? book['genres']
                       .toString()
-                  .replaceAll("[", "")
+                      .replaceAll("[", "")
                       .replaceAll("]", "")
                   : "--"),
               leading: const Icon(

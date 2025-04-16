@@ -8,6 +8,7 @@ import 'package:mybookshelf/pages/playground/playground.page.dart';
 import 'package:mybookshelf/pages/subpages/settings/subpages/account.settings.page.dart';
 import 'package:mybookshelf/pages/subpages/settings/subpages/creation.settings.page.dart';
 import 'package:mybookshelf/sys/shellnavigation.sys.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
 import '../pages/books/books.page.dart';
@@ -19,8 +20,6 @@ import '../pages/lends/subpages/create.lend.page.dart';
 import '../pages/subpages/account/login.account.page.dart';
 import '../pages/subpages/settings/settings.page.dart';
 import '../res/bottomsheet.util.dart';
-
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -107,12 +106,13 @@ class MyBookshelfRouter {
         ),
         // Displayed ShellRoute's Navigator.
         GoRoute(
-            path: '/books',
-            builder: (BuildContext context, GoRouterState state) {
-              return BooksPage(
-                key: booksPageKey,
-              );
-            },),
+          path: '/books',
+          builder: (BuildContext context, GoRouterState state) {
+            return BooksPage(
+              key: booksPageKey,
+            );
+          },
+        ),
         GoRoute(
           path: '/lends',
           builder: (BuildContext context, GoRouterState state) {
@@ -155,52 +155,51 @@ class MyBookshelfRouter {
       },
     ),
     GoRoute(
-      path: '/settings',
+        path: '/settings',
+        builder: (BuildContext context, GoRouterState state) {
+          return const SettingsPage();
+        },
+        routes: [
+          GoRoute(
+            path: '/account',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SettingsAccountPage();
+            },
+          ),
+          GoRoute(
+            path: '/creation',
+            builder: (BuildContext context, GoRouterState state) {
+              return const SettingsCreationPage();
+            },
+          )
+        ]),
+    GoRoute(
+      path: '/404',
       builder: (BuildContext context, GoRouterState state) {
-        return const SettingsPage();
+        return const Scaffold(
+          body: Center(
+            child: Text('404 - Not found'),
+          ),
+        );
       },
-      routes: [
-        GoRoute(
-          path: '/account',
-          builder: (BuildContext context, GoRouterState state) {
-            return const SettingsAccountPage();
-          },
-        ),
-        GoRoute(
-          path: '/creation',
-          builder: (BuildContext context, GoRouterState state) {
-            return const SettingsCreationPage();
-          },
-        )
-      ]
     ),
-
-          GoRoute(
-            path: '/404',
-            builder: (BuildContext context, GoRouterState state) {
-              return const Scaffold(
-                body: Center(
-                  child: Text('404 - Not found'),
-                ),
-              );
-            },
+    GoRoute(
+      path: '/400',
+      builder: (BuildContext context, GoRouterState state) {
+        return const Scaffold(
+          body: Center(
+            child: Text('400 - Parametri mancanti'),
           ),
-          GoRoute(
-            path: '/400',
-            builder: (BuildContext context, GoRouterState state) {
-              return const Scaffold(
-                body: Center(
-                  child: Text('400 - Parametri mancanti'),
-                ),
-              );
-            },
-          ),
-
+        );
+      },
+    ),
     GoRoute(
       path: '/lends/details/:id',
       redirect: (context, state) {
-       if  ((state.extra) is Map) {return null;}
-       return '/400';
+        if ((state.extra) is Map) {
+          return null;
+        }
+        return '/400';
       },
       builder: (BuildContext context, GoRouterState state) {
         return LendDetails(book: (state.extra as Map));
@@ -209,14 +208,16 @@ class MyBookshelfRouter {
     GoRoute(
       path: '/books/details/:id',
       redirect: (context, state) {
-        if  ((state.extra) is Map) {return null;}
+        if ((state.extra) is Map) {
+          return null;
+        }
         return '/400';
       },
       builder: (BuildContext context, GoRouterState state) {
         return BooksDetails(book: (state.extra as Map));
       },
     )
-    ];
+  ];
 
   static List<ShellNavigationDest> _pages(BuildContext context) {
     return [

@@ -14,7 +14,13 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: context.canPop() ? null : IconButton(onPressed: () {context.go('/');}, icon: const Icon(Icons.home_rounded)),
+        leading: context.canPop()
+            ? null
+            : IconButton(
+                onPressed: () {
+                  context.go('/');
+                },
+                icon: const Icon(Icons.home_rounded)),
         title: const Text("Impostazioni"),
         centerTitle: false,
       ),
@@ -40,7 +46,7 @@ class SettingsPage extends StatelessWidget {
                         return Text("Ciao ${userName.toString()}");
                       }
                     }
-          
+
                     return Text("Ciao Utente");
                   },
                   future: supabase.from("profile").select(),
@@ -55,7 +61,6 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.key_rounded),
                 onTap: () {
                   context.push('/settings/account');
-
                 },
               ),
               ListTile(

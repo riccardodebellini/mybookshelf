@@ -70,15 +70,15 @@ class _CreateBookPageState extends State<CreateBookPage> {
   }
 
   Future fetchGenres() async {
-      final data = await supabase.from("profile").select();
-      final userData = data[0];
-      setState(() {
-        if (userData['genres'] != null) {
-          genres = List<String>.from(userData['genres']);
-        } else {
-          genres = ["Nessun genere"];
-        }
-      });
+    final data = await supabase.from("profile").select();
+    final userData = data[0];
+    setState(() {
+      if (userData['genres'] != null) {
+        genres = List<String>.from(userData['genres']);
+      } else {
+        genres = ["Nessun genere"];
+      }
+    });
   }
 
   @override

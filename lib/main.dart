@@ -11,7 +11,6 @@ import 'package:mybookshelf/sys/notifications.dart';
 import 'package:mybookshelf/sys/router.sys.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 final supabase = Supabase.instance.client;
 
 // Quick settings

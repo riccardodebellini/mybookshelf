@@ -25,7 +25,13 @@ class _GenresPageState extends State<GenresPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.genre.capitalize()),
-          leading: context.canPop() ? null : IconButton(onPressed: () {context.go('/');}, icon: const Icon(Icons.home_rounded)),
+          leading: context.canPop()
+              ? null
+              : IconButton(
+                  onPressed: () {
+                    context.go('/');
+                  },
+                  icon: const Icon(Icons.home_rounded)),
         ),
         body: SingleChildScrollView(
           child: ItemsList(

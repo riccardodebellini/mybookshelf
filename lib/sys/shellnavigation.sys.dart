@@ -162,10 +162,11 @@ class ShellNavigation extends StatelessWidget {
                           // Landscape typically uses icon-only FAB
                           child: currentPage.fab?.icon,
                         )
-                      : const SizedBox
-                          .shrink(), // Or SizedBox() if no leading needed
+                      : const SizedBox.shrink(),
+                  // Or SizedBox() if no leading needed
                   selectedIndex: currentIndex,
-                  labelType: NavigationRailLabelType.all, // Or selected/none
+                  labelType: NavigationRailLabelType.all,
+                  // Or selected/none
                   onDestinationSelected: (index) =>
                       _onDestinationSelected(index, context),
                   destinations: List.generate(pageData.length, (index) {
@@ -175,7 +176,6 @@ class ShellNavigation extends StatelessWidget {
                     );
                   }),
                 ),
-
                 Expanded(
                   // The actual page content is placed here
                   child: Padding(
@@ -183,13 +183,12 @@ class ShellNavigation extends StatelessWidget {
                     // Optional: Wrap in Card for visual separation
                     child: Theme.of(context).brightness == Brightness.light
                         ? Card.outlined(
-
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: child, // Page content inside card
-                            ))
+                            padding: const EdgeInsets.all(8.0),
+                            child: child, // Page content inside card
+                          ))
                         : Card(
-                           elevation: 0,
+                            elevation: 0,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: child, // Page content inside card

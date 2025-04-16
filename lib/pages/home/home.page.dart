@@ -23,6 +23,7 @@ class HomePageState extends State<HomePage> {
       GlobalKey<RefreshIndicatorState>();
 
   TextEditingController query = TextEditingController();
+
   fetchGenres() async {
     final data = await supabase.from("profile").select();
     final userData = data[0];

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 class AuthSystem extends StatelessWidget {
   final Widget userLogged;
   final Widget userNotLogged;

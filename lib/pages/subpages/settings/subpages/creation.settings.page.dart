@@ -41,6 +41,7 @@ class _SettingsCreationPageState extends State<SettingsCreationPage> {
       }
     });
   }
+
   fetchGenres() async {
     final data = await supabase.from("profile").select();
     final userData = data[0];
