@@ -1,5 +1,14 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target" : { "namespace": "android_app", "package_name": "com.riccardodebellini.mybookshelf",
-               "sha256_cert_fingerprints": ["2D:FB:20:7F:E7:AF:CA:BE:94:13:96:82:4A:FD:A4:95:F7:5C:08:51:F5:0B:5B:BE:B7:CC:4F:62:58:38:48:8D"] }
-}]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.riccardodebellini.mybookshelf",
+      "sha256_cert_fingerprints": [
+        "2D:FB:20:7F:E7:AF:CA:BE:94:13:96:82:4A:FD:A4:95:F7:5C:08:51:F5:0B:5B:BE:B7:CC:4F:62:58:38:48:8D"
+      ]
+    }
+  }
+]
