@@ -1,8 +1,8 @@
 import 'package:flex_list/flex_list.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybookshelf/res/itemlist.res.dart';
-import 'package:mybookshelf/sys/extensions.util.dart';
+import 'package:mytomes/res/itemlist.res.dart';
+import 'package:mytomes/sys/extensions.util.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -77,7 +77,7 @@ class HomePageState extends State<HomePage> {
           ),
           Center(
             child: Text(
-              "Benvenuto in My.Bookshelf",
+              "Benvenuto in MyTomes",
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),

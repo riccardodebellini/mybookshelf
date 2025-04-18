@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybookshelf/pages/books/subpages/details.book.page.dart';
-import 'package:mybookshelf/pages/home/subpages/genres.page.dart';
-import 'package:mybookshelf/pages/home/subpages/searchresults.page.dart';
-import 'package:mybookshelf/pages/lends/subpages/details.lend.page.dart';
-import 'package:mybookshelf/pages/playground/playground.page.dart';
-import 'package:mybookshelf/pages/subpages/settings/subpages/account.settings.page.dart';
-import 'package:mybookshelf/pages/subpages/settings/subpages/creation.settings.page.dart';
-import 'package:mybookshelf/sys/shellnavigation.sys.dart';
+import 'package:mytomes/pages/books/subpages/details.book.page.dart';
+import 'package:mytomes/pages/home/subpages/genres.page.dart';
+import 'package:mytomes/pages/home/subpages/searchresults.page.dart';
+import 'package:mytomes/pages/lends/subpages/details.lend.page.dart';
+import 'package:mytomes/pages/playground/playground.page.dart';
+import 'package:mytomes/pages/subpages/settings/subpages/account.settings.page.dart';
+import 'package:mytomes/pages/subpages/settings/subpages/creation.settings.page.dart';
+import 'package:mytomes/sys/shellnavigation.sys.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
@@ -23,7 +23,7 @@ import '../res/bottomsheet.util.dart';
 
 final supabase = Supabase.instance.client;
 
-class MyBookshelfRouter {
+class MyTomesRouter {
   static final GlobalKey<NavigatorState> _rootNavigatorKey =
       GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> _shellNavigatorKey =
@@ -31,7 +31,7 @@ class MyBookshelfRouter {
 
   BuildContext context;
 
-  MyBookshelfRouter({required this.context});
+  MyTomesRouter({required this.context});
 
   static GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
