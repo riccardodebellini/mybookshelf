@@ -117,10 +117,14 @@ class _MyAppState extends State<MyApp> {
     // Example: uri = myapp://product/123?ref=home
     // We want to navigate to /product/123?ref=home in go_router
     final String path = uri.path; // Gets '/product/123'
-    final String query =
-        uri.hasQuery ? '?${uri.query}' : ''; // Gets '?ref=home'
-    final String location =
-        '$path$query'; // Combines to '/product/123?ref=home'
+    print("uri:  " + uri.toString());
+
+    String location = uri
+        .toString()
+        .split("mytomes.vercel.app")[1]; // Combines to '/product/123?ref=home'
+    location.contains('#')
+        ? {location = location.replaceRange(0, 2, "")}
+        : null;
 
     print('Attempting to navigate to: $location');
     try {
