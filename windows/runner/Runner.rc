@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.riccardodebellini" "\0"
-            VALUE "FileDescription", "mybookshelf" "\0"
+VALUE "FileDescription", "MyTomes" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "mybookshelf" "\0"
+VALUE "InternalName", "MyTomes" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.riccardodebellini. All rights reserved." "\0"
-            VALUE "OriginalFilename", "mybookshelf.exe" "\0"
-            VALUE "ProductName", "mybookshelf" "\0"
+VALUE "OriginalFilename", "MyTomes.exe" "\0"
+VALUE "ProductName", "MyTomes" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

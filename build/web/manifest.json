@@ -1,11 +1,11 @@
 {
-    "name": "mybookshelf",
-    "short_name": "mybookshelf",
+    "name": "MyTomes",
+    "short_name": "MyTomes",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Una app per gestire tutti i tuoi libri \uD83D\uDCDA",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

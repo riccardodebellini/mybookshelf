@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybookshelf/main.dart';
+import 'package:mytomes/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -78,23 +78,22 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   showAboutDialog(
                       context: context,
-                      applicationName: "My.Bookshelf",
+                      applicationName: "MyTomes",
                       applicationVersion: (isTestVersion
                           ? "Versione di test ($appVersion-test)"
                           : appVersion),
                       applicationIcon: const CircleAvatar(child: Text("My")),
                       applicationLegalese:
-                          "(c) Riccardo Debellini - 2024\nLicense at github.com/riccardodebellini/mybookshelf");
+                          "(c) Riccardo Debellini - 2024\nLicense at github.com/riccardodebellini/mytomes");
                 },
               ),
               ListTile(
                 title: const Text("Condividi"),
-                subtitle: const Text("Condividi il link a My.Bookshelf"),
+                subtitle: const Text("Condividi il link a MyTomes"),
                 leading: const Icon(Icons.share_rounded),
                 onTap: () {
                   Clipboard.setData(const ClipboardData(
-                      text:
-                          "https://riccardodebellini.github.io/mybookshelf/"));
+                      text: "https://riccardodebellini.github.io/mytomes/"));
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Link copiato negli appunti"),
                     behavior: SnackBarBehavior.floating,

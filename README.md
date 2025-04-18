@@ -1,8 +1,9 @@
-# MyBookShelf📖
+# MyTomes 📖
 
 **Manage your home library with ease!**
 
-MyBookshelf is an intuitive Flutter application that lets you organize and track your personal book collection. Cataloging your books has never been easier.
+MyTomes is an intuitive Flutter application that lets you organize and track your personal book
+collection. Cataloging your books has never been easier.
 
 ## ✨LATEST UPDATE and release notes
 
@@ -28,7 +29,7 @@ MyBookshelf is an intuitive Flutter application that lets you organize and track
    - Sort by location to easily find specific books or identify lost ones.
 
 - **Privacy Protection:**
-   - Log in or create your MyBookshelf account to better protect your collection
+  - Log in with your account to better protect your collection
 
 -**Prefill fields with Google Books**
    - Get pre-populated fields with title, publication date, plot and much more with just a few clicks

@@ -45,7 +45,7 @@ body:
       description: "Su quale (o quali) edizioni trovi l'errore?"
       multiple: true
       options:
-        - Web (riccardodebellini.github.io/mybookshelf)
+        - Web (riccardodebellini.github.io/mytomes)
         - App
     validations:
       required: true

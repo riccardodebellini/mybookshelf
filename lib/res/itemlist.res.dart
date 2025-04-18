@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mybookshelf/res/columnbuilder.util.dart';
-import 'package:mybookshelf/sys/extensions.util.dart';
+import 'package:mytomes/res/columnbuilder.util.dart';
+import 'package:mytomes/sys/extensions.util.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'books/cards.dart';
